@@ -36,6 +36,8 @@ export interface CalculatorEntry {
   description: string;
   /** The question it answers for the user. */
   useCase: string;
+  /** Short imperative link label, e.g. "Calculate EMI". Live calculators only. */
+  action?: string;
   category: CalculatorCategory;
   status: "live" | "planned";
   related: CalculatorId[];
@@ -55,6 +57,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     name: "EMI Calculator",
     description: "Monthly instalment, total interest and full amortization schedule for any reducing-balance loan.",
     useCase: "What will my monthly instalment be, and how much interest will I pay?",
+    action: "Calculate EMI",
     category: "loans",
     status: "live",
     related: ["home-loan-emi", "loan", "home-loan", "loan-prepayment"],
@@ -65,6 +68,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     name: "SIP Calculator",
     description: "Estimate how a fixed monthly investment could grow over time at an assumed rate of return.",
     useCase: "How much could my monthly SIP be worth after a number of years?",
+    action: "Estimate SIP value",
     category: "investing",
     status: "live",
     related: ["investment", "retirement", "emi"],
@@ -75,6 +79,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     name: "Loan Calculator",
     description: "Compare the true cost of personal, education, vehicle or business loans by amount, rate and tenure.",
     useCase: "What does this loan really cost me over its full term?",
+    action: "Calculate loan cost",
     category: "loans",
     status: "live",
     related: ["emi", "loan-eligibility", "car-loan", "loan-prepayment"],
@@ -85,6 +90,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     name: "Home Loan Calculator",
     description: "Work out loan amount, EMI, LTV and total upfront cash from property price and down payment.",
     useCase: "How much cash do I need, and what will I pay each month to buy this home?",
+    action: "Plan a home purchase",
     category: "property",
     status: "live",
     related: ["home-loan-emi", "rent-vs-buy", "home-affordability", "property-purchase-cost"],
@@ -95,6 +101,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     name: "Home Loan EMI Calculator",
     description: "Home loan EMI with year-by-year amortization and the impact of rate and tenure changes.",
     useCase: "What is the EMI on my home loan and how do rate or tenure changes affect it?",
+    action: "Calculate home loan EMI",
     category: "property",
     status: "live",
     related: ["home-loan", "home-affordability", "emi", "loan-prepayment"],

@@ -51,10 +51,10 @@ export function CalculatorPageLayout({
             { name: entry.name, path: calculatorPath(entry) },
           ]}
         />
-        <header className="mt-5 max-w-3xl">
-          <h1 className="text-[2rem] font-semibold sm:text-[2.6rem]">{h1}</h1>
-          <div className="mt-3 text-lg leading-relaxed text-ink-muted">{intro}</div>
-          <p className="mt-3 text-sm text-ink-muted">
+        <header className="mt-4 max-w-3xl">
+          <h1 className="text-[1.875rem] font-semibold sm:text-[2.25rem]">{h1}</h1>
+          <div className="mt-2 text-[1.0625rem] leading-relaxed text-ink-muted">{intro}</div>
+          <p className="mt-2 text-sm text-ink-muted">
             Last reviewed <time dateTime={siteConfig.contentUpdated}>{formatDate(siteConfig.contentUpdated)}</time> ·{" "}
             <Link href="/about#methodology" className="underline underline-offset-2 hover:text-brand">
               How we calculate
@@ -62,7 +62,7 @@ export function CalculatorPageLayout({
           </p>
         </header>
 
-        <div className="mt-8">{calculator}</div>
+        <div className="mt-6">{calculator}</div>
 
         <div className="mt-6">
           <Disclaimer investment={investmentDisclaimer} />
@@ -70,10 +70,10 @@ export function CalculatorPageLayout({
 
         <article className="prose-fin mt-6">{children}</article>
 
-        <div className="mt-14 max-w-3xl">
+        <div className="mt-12 max-w-3xl">
           <Faq items={faqs} />
         </div>
-        <div className="mt-14">
+        <div className="mt-12">
           <RelatedCalculators id={id} />
         </div>
       </Container>

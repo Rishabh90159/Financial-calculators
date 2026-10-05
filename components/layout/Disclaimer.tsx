@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function Disclaimer({ investment = false }: { investment?: boolean }) {
   return (
-    <aside aria-label="Disclaimer" className="rounded-lg border border-line bg-surface p-4 text-sm text-ink-muted">
+    <aside aria-label="Disclaimer" className="max-w-4xl border-l-2 border-accent/70 py-1 pl-4 text-sm text-ink-muted">
       <p>
         <strong className="text-ink">Disclaimer:</strong> This calculator gives estimates for informational and
         educational purposes only. It is not financial advice.{" "}

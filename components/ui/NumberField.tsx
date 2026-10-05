@@ -81,7 +81,7 @@ export function NumberField({
         </label>
       </div>
       <div
-        className={`mt-1.5 flex items-center rounded-lg border bg-surface transition-colors focus-within:border-brand ${
+        className={`mt-1.5 flex items-center rounded-md border bg-surface transition-colors focus-within:border-brand ${
           error ? "border-danger" : "border-line-strong"
         }`}
       >

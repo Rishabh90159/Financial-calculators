@@ -98,7 +98,7 @@ export function HomeLoanCalculator() {
                 }}
               />
             </div>
-            <div className="rounded-lg border border-dashed border-line-strong bg-paper px-4 py-3">
+            <div className="border-y border-line bg-paper px-4 py-3 -mx-4 sm:-mx-6 sm:px-6">
               <p className="text-sm font-semibold text-ink">Loan amount</p>
               <output
                 aria-live="polite"
@@ -205,7 +205,7 @@ export function HomeLoanCalculator() {
                   }
                 />
               </div>
-              <div className="mt-3 grid grid-cols-1 gap-x-6 gap-y-2 min-[420px]:grid-cols-2">
+              <div className="mt-3 grid grid-cols-2 gap-x-5 gap-y-2">
                 <ResultStat label="Loan amount" value={formatINR(result.loanAmount)} />
                 <ResultStat label="Down payment" value={`${formatPercent(result.downPaymentPercent)}`} note={formatINR(result.downPayment)} />
                 <ResultStat label="Loan-to-value (LTV)" value={formatPercent(result.ltvPercent)} />
@@ -236,7 +236,7 @@ export function HomeLoanCalculator() {
               />
             )}
 
-            <div className="rounded-lg border border-line bg-surface p-4">
+            <div className="border-t border-line pt-4">
               <p className="text-sm font-semibold text-ink">Total cost of buying with this loan</p>
               <p className="mt-1 font-serif text-2xl font-semibold tabular-nums">{formatINR(result.totalCostOfOwnership)}</p>
               <p className="mt-1 text-xs text-ink-muted">

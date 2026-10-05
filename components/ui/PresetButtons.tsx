@@ -30,7 +30,7 @@ export function PresetButtons({
               type="button"
               aria-pressed={active}
               onClick={() => onSelect(p.value)}
-              className={`rounded-full border px-3.5 py-1.5 text-sm font-semibold tabular-nums transition-colors ${
+              className={`rounded border px-3 py-1.5 text-sm font-semibold tabular-nums transition-colors ${
                 active
                   ? "border-brand bg-brand text-white"
                   : "border-line-strong bg-surface text-ink hover:border-brand hover:text-brand"

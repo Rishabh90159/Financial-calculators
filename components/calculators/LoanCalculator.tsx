@@ -75,7 +75,7 @@ export function LoanCalculator() {
             <div>
               <fieldset className="mb-2">
                 <legend className="sr-only">Enter tenure in</legend>
-                <div className="inline-flex rounded-lg border border-line-strong p-0.5">
+                <div className="inline-flex rounded-md border border-line-strong p-0.5">
                 {(["years", "months"] as const).map((u) => (
                   <label
                     key={u}

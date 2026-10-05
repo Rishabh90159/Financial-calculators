@@ -16,7 +16,7 @@ export function Callout({
   tone?: keyof typeof TONES;
 }) {
   return (
-    <div className={`rounded-lg border p-4 text-sm leading-relaxed ${TONES[tone]}`}>
+    <div className={`rounded-md border p-4 text-sm leading-relaxed ${TONES[tone]}`}>
       {title && <p className="mb-1 font-semibold text-ink">{title}</p>}
       <div className="text-ink-muted [&_strong]:text-ink">{children}</div>
     </div>

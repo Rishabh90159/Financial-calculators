@@ -15,15 +15,16 @@ const SWATCH: Record<NonNullable<ResultStatProps["swatch"]>, string> = {
   neutral: "bg-ink-muted",
 };
 
+/** The headline figure is set apart by size alone; supporting figures sit on hairline rules. */
 export function ResultStat({ label, value, swatch, emphasis, note }: ResultStatProps) {
   return (
-    <div className={emphasis ? "rounded-lg bg-brand-tint p-4" : "py-1"}>
+    <div className={emphasis ? "border-b border-line pb-4" : "border-t border-line pt-2"}>
       <dt className="flex items-center gap-2 text-sm text-ink-muted">
-        {swatch && <span aria-hidden="true" className={`inline-block h-3 w-3 shrink-0 rounded-sm ${SWATCH[swatch]}`} />}
+        {swatch && <span aria-hidden="true" className={`inline-block h-2.5 w-2.5 shrink-0 rounded-sm ${SWATCH[swatch]}`} />}
         {label}
       </dt>
       <dd
-        className={`tabular-nums font-semibold text-ink ${emphasis ? "mt-1 font-serif text-3xl sm:text-4xl" : "mt-0.5 text-xl"}`}
+        className={`tabular-nums font-semibold text-ink ${emphasis ? "mt-1 font-serif text-[2.25rem] leading-tight sm:text-[2.5rem]" : "mt-0.5 text-lg"}`}
       >
         {value}
       </dd>

@@ -28,7 +28,7 @@ export function SimplePage({
           { name: title, path },
         ]}
       />
-      <h1 className="mt-5 text-[2rem] font-semibold sm:text-[2.6rem]">{title}</h1>
+      <h1 className="mt-4 text-[1.875rem] font-semibold sm:text-[2.25rem]">{title}</h1>
       <p className="mt-2 text-sm text-ink-muted">
         Last updated <time dateTime={siteConfig.contentUpdated}>{formatDate(siteConfig.contentUpdated)}</time>
       </p>

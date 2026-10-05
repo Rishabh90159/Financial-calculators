@@ -24,15 +24,15 @@ export function LoanInsights({ input, heading = "Key insights" }: { input: EmiIn
   }
 
   return (
-    <section aria-labelledby="insights-heading" className="rounded-[var(--radius-card)] border border-line bg-surface p-5 sm:p-6">
+    <section aria-labelledby="insights-heading" className="border-t border-line pt-6">
       <h2 id="insights-heading" className="text-xl">
         {heading}
       </h2>
       <p className="mt-1 text-sm text-ink-muted">Based on the values you entered above. Updates as you change them.</p>
-      <ul className="mt-4 space-y-3">
+      <ul className="mt-4 max-w-3xl space-y-2.5">
         {insights.map((text) => (
           <li key={text.slice(0, 40)} className="flex gap-3 text-[0.95rem] leading-relaxed">
-            <span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />
+            <span aria-hidden="true" className="mt-[0.7rem] h-px w-3 shrink-0 bg-ink-muted" />
             <span>{text}</span>
           </li>
         ))}

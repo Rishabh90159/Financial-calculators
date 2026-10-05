@@ -76,7 +76,7 @@ export function SipCalculator() {
                     note={`About ${multiple.toFixed(2)}× the amount invested, if returns average ${annualReturn}% a year.`}
                   />
                 </div>
-                <div className="mt-3 grid grid-cols-1 gap-x-6 gap-y-2 min-[420px]:grid-cols-2">
+                <div className="mt-3 grid grid-cols-2 gap-x-5 gap-y-2">
                   <ResultStat swatch="principal" label="Invested amount" value={formatINR(result.totalInvested)} />
                   <ResultStat swatch="interest" label="Estimated returns" value={formatINR(result.estimatedReturns)} />
                 </div>
@@ -87,7 +87,7 @@ export function SipCalculator() {
                 centerLabel="Total value"
                 centerValue={formatINRCompact(result.futureValue)}
               />
-              <p className="rounded-lg bg-accent-tint px-3 py-2 text-xs text-ink-muted">
+              <p className="border-l-2 border-accent pl-3 text-xs text-ink-muted">
                 <strong className="text-ink">Returns are not guaranteed.</strong> Market-linked investments can lose
                 value. This projection assumes a constant return, which real markets do not deliver.
               </p>
@@ -99,7 +99,7 @@ export function SipCalculator() {
       />
 
       {growth.length > 0 && (
-        <section aria-labelledby="growth-heading" className="rounded-[var(--radius-card)] border border-line bg-surface p-5 sm:p-6">
+        <section aria-labelledby="growth-heading" className="border-t border-line pt-6">
           <h2 id="growth-heading" className="text-xl">
             How your SIP could grow, year by year
           </h2>
@@ -116,7 +116,7 @@ export function SipCalculator() {
               data={growth.map((g) => ({ label: String(g.year), base: g.invested, top: g.estimatedReturns }))}
             />
           </div>
-          <details className="mt-5 rounded-lg border border-line">
+          <details className="mt-5 rounded-[var(--radius-card)] border border-line bg-surface">
             <summary className="cursor-pointer px-4 py-3 text-sm font-semibold text-brand">View year-by-year table</summary>
             <div className="max-h-96 overflow-auto border-t border-line" tabIndex={0} role="region" aria-label="Year-by-year SIP growth table, scrollable">
               <table className="w-full text-sm">

@@ -21,7 +21,7 @@ export function AmortizationTable({ input, onViewChange }: AmortizationTableProp
   if (schedule.length === 0) return null;
 
   return (
-    <section aria-labelledby="amortization-heading" className="rounded-[var(--radius-card)] border border-line bg-surface p-5 sm:p-6">
+    <section aria-labelledby="amortization-heading" className="border-t border-line pt-6">
       <h2 id="amortization-heading" className="text-xl">
         Amortization schedule
       </h2>
@@ -40,7 +40,7 @@ export function AmortizationTable({ input, onViewChange }: AmortizationTableProp
         />
       </div>
 
-      <div role="group" aria-label="Schedule view" className="mt-6 inline-flex rounded-lg border border-line-strong p-0.5">
+      <div role="group" aria-label="Schedule view" className="mt-5 inline-flex rounded-md border border-line-strong p-0.5">
         {(["yearly", "monthly"] as const).map((v) => (
           <button
             key={v}
@@ -60,7 +60,7 @@ export function AmortizationTable({ input, onViewChange }: AmortizationTableProp
       </div>
 
       <div
-        className="mt-3 max-h-[28rem] overflow-auto rounded-lg border border-line"
+        className="mt-3 max-h-[28rem] overflow-auto rounded-[var(--radius-card)] border border-line bg-surface"
         tabIndex={0}
         role="region"
         aria-label={`${view === "yearly" ? "Yearly" : "Monthly"} amortization table, scrollable`}
