@@ -7,7 +7,7 @@ const DESCRIPTION =
   "Estimate how much a monthly SIP could grow to. Enter your monthly investment, expected return and duration to see total invested, estimated returns and future value.";
 
 export const metadata = buildMetadata({
-  title: "SIP Calculator — Estimate Your SIP Returns & Future Value",
+  title: "SIP Calculator – Calculate SIP Returns & Future Value",
   description: DESCRIPTION,
   path: "/calculators/sip-calculator",
 });

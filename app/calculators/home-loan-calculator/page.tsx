@@ -7,7 +7,7 @@ const DESCRIPTION =
   "Plan a home purchase from the property price: down payment, loan amount, loan-to-value ratio, EMI, total interest and the total cash you need upfront.";
 
 export const metadata = buildMetadata({
-  title: "Home Loan Calculator — Down Payment, LTV, EMI & Upfront Cost",
+  title: "Home Loan Calculator – EMI, LTV & Down Payment",
   description: DESCRIPTION,
   path: "/calculators/home-loan-calculator",
 });

@@ -3,10 +3,14 @@
  * Rename the product here; every page, metadata tag and JSON-LD block reads from it.
  */
 
+/** Preferred public origin. Non-www and http variants 308-redirect here at the Vercel edge. */
+const PRODUCTION_URL = "https://www.moneymetric.in";
+
 function resolveSiteUrl(): string {
   const explicit = process.env.NEXT_PUBLIC_SITE_URL;
   if (explicit) return explicit.replace(/\/+$/, "");
-  // Vercel exposes the production domain at build time.
+  // Pin production to the www origin so canonicals never depend on which domain Vercel reports.
+  if (process.env.VERCEL_ENV === "production") return PRODUCTION_URL;
   const vercelProd = process.env.VERCEL_PROJECT_PRODUCTION_URL;
   if (vercelProd) return `https://${vercelProd}`;
   return "http://localhost:3000";

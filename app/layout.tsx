@@ -3,6 +3,8 @@ import { IBM_Plex_Sans, Source_Serif_4 } from "next/font/google";
 import { Analytics } from "@/components/layout/Analytics";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { JsonLd } from "@/components/seo/JsonLd";
+import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import { isIndexable, siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -54,6 +56,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         </main>
         <Footer />
         <Analytics />
+        <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
       </body>
     </html>
   );

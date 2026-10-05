@@ -7,7 +7,7 @@ const DESCRIPTION =
   "Work out the EMI, total interest and true cost of a personal, car, education or business loan. Enter tenure in months or years and compare offers side by side.";
 
 export const metadata = buildMetadata({
-  title: "Loan Calculator — EMI, Total Interest & True Cost of a Loan",
+  title: "Loan Calculator – EMI, Interest & Total Repayment",
   description: DESCRIPTION,
   path: "/calculators/loan-calculator",
 });

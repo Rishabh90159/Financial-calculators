@@ -10,6 +10,10 @@ interface PageMetaInput {
   absoluteTitle?: boolean;
 }
 
+/** Stable node ids so every page's JSON-LD refers to the same Organization and WebSite. */
+const ORGANIZATION_ID = `${siteConfig.url}/#organization`;
+const WEBSITE_ID = `${siteConfig.url}/#website`;
+
 const OG_IMAGE = { url: "/opengraph-image", width: 1200, height: 630, alt: `${siteConfig.name} — ${siteConfig.tagline}` };
 
 /**
@@ -88,7 +92,26 @@ export function calculatorAppJsonLd(entry: CalculatorEntry, description: string)
     browserRequirements: "Requires JavaScript for interactive recalculation.",
     isAccessibleForFree: true,
     offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
-    publisher: { "@type": "Organization", name: siteConfig.name, url: siteConfig.url },
+    inLanguage: "en-IN",
+    isPartOf: { "@id": WEBSITE_ID },
+    publisher: { "@id": ORGANIZATION_ID },
+  };
+}
+
+export function organizationJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": ORGANIZATION_ID,
+    name: siteConfig.name,
+    url: siteConfig.url,
+    description: siteConfig.description,
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: siteConfig.contact.phone,
+      contactType: "customer support",
+      areaServed: "IN",
+    },
   };
 }
 
@@ -96,15 +119,26 @@ export function websiteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
+    "@id": WEBSITE_ID,
     name: siteConfig.name,
     url: siteConfig.url,
     description: siteConfig.description,
     inLanguage: "en-IN",
-    publisher: {
-      "@type": "Organization",
-      name: siteConfig.name,
-      url: siteConfig.url,
-      contactPoint: { "@type": "ContactPoint", telephone: siteConfig.contact.phone, contactType: "customer support" },
-    },
+    publisher: { "@id": ORGANIZATION_ID },
+  };
+}
+
+/** Plain WebPage node for informational pages (about, disclaimer, privacy, terms). */
+export function webPageJsonLd({ name, description, path }: { name: string; description: string; path: string }) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name,
+    description,
+    url: absoluteUrl(path),
+    inLanguage: "en-IN",
+    dateModified: siteConfig.contentUpdated,
+    isPartOf: { "@id": WEBSITE_ID },
+    publisher: { "@id": ORGANIZATION_ID },
   };
 }

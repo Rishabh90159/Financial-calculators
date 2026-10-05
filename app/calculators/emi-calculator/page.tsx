@@ -7,7 +7,7 @@ const DESCRIPTION =
   "Calculate your monthly EMI, total interest and total repayment for any loan. See the reducing-balance formula, a worked example and a full amortization schedule.";
 
 export const metadata = buildMetadata({
-  title: "EMI Calculator — Monthly EMI, Interest & Amortization",
+  title: "EMI Calculator – Calculate Monthly EMI & Interest",
   description: DESCRIPTION,
   path: "/calculators/emi-calculator",
 });

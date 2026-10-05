@@ -1,8 +1,11 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Faq } from "@/components/ui/Faq";
 import { calculatorPath, getCalculator, type CalculatorId } from "@/lib/calculators/registry";
+import { formatDate } from "@/lib/format";
 import { calculatorAppJsonLd, faqJsonLd, type FaqItem } from "@/lib/seo";
+import { siteConfig } from "@/lib/site";
 import { Breadcrumbs } from "./Breadcrumbs";
 import { Container } from "./Container";
 import { Disclaimer } from "./Disclaimer";
@@ -51,6 +54,12 @@ export function CalculatorPageLayout({
         <header className="mt-5 max-w-3xl">
           <h1 className="text-[2rem] font-semibold sm:text-[2.6rem]">{h1}</h1>
           <div className="mt-3 text-lg leading-relaxed text-ink-muted">{intro}</div>
+          <p className="mt-3 text-sm text-ink-muted">
+            Last reviewed <time dateTime={siteConfig.contentUpdated}>{formatDate(siteConfig.contentUpdated)}</time> ·{" "}
+            <Link href="/about#methodology" className="underline underline-offset-2 hover:text-brand">
+              How we calculate
+            </Link>
+          </p>
         </header>
 
         <div className="mt-8">{calculator}</div>

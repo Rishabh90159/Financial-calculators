@@ -72,3 +72,8 @@ export function parseNumberInput(raw: string): number | null {
   const n = Number(cleaned);
   return Number.isFinite(n) ? n : null;
 }
+
+/** "5 October 2026" from an ISO date, formatted in UTC so server and client agree. */
+export function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+}

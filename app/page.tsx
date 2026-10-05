@@ -3,13 +3,13 @@ import { Container } from "@/components/layout/Container";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Faq } from "@/components/ui/Faq";
 import { calculatorPath, getCalculator, liveCalculators } from "@/lib/calculators/registry";
-import { buildMetadata, faqJsonLd, websiteJsonLd, type FaqItem } from "@/lib/seo";
+import { buildMetadata, faqJsonLd, type FaqItem } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
 export const metadata = buildMetadata({
-  title: `EMI, SIP & Home Loan Calculators — ${siteConfig.name}`,
+  title: `Free Financial Calculators – EMI, SIP & Home Loan | ${siteConfig.name}`,
   description:
-    "Free EMI, SIP, loan and home loan calculators with amortization schedules, clear formulas and plain-English explanations. No sign-up, nothing stored.",
+    "Free financial calculators for EMI, home loans, SIP returns, loans and more. Calculate monthly payments, interest, returns and repayment schedules with MoneyMetric.",
   path: "/",
   absoluteTitle: true,
 });
@@ -69,17 +69,15 @@ export default function HomePage() {
 
   return (
     <>
-      <JsonLd data={[websiteJsonLd(), faqJsonLd(FAQS)]} />
+      <JsonLd data={faqJsonLd(FAQS)} />
 
       {/* Hero */}
       <section className="border-b border-line">
         <Container className="grid gap-10 py-14 sm:py-20 lg:grid-cols-[1.15fr_1fr] lg:items-center">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-brand">Free financial calculators</p>
-            <h1 className="mt-3 text-[2.5rem] font-semibold leading-[1.08] sm:text-6xl">
-              Financial calculations
-              <br />
-              made simple.
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-brand">{siteConfig.tagline}</p>
+            <h1 className="mt-3 text-[2.25rem] font-semibold leading-[1.1] sm:text-5xl lg:text-[3.5rem]">
+              Free Financial Calculators for Loans, EMI, SIP &amp; Home Loans
             </h1>
             <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink-muted">
               Work out your EMI, plan a SIP or cost a home purchase in seconds. Every result shows the formula behind it,
@@ -237,6 +235,40 @@ export default function HomePage() {
               ))}
             </ol>
           </div>
+        </Container>
+      </section>
+
+      <section aria-labelledby="guide-heading" className="pb-16">
+        <Container className="prose-fin">
+          <h2 id="guide-heading">Financial calculators built for Indian borrowers and investors</h2>
+          <p>
+            {siteConfig.name} is a set of free financial calculators that use Indian conventions: amounts in lakh and
+            crore, monthly EMIs on a reducing balance, and monthly SIP instalments. They are meant to help you plan and
+            compare before you speak to a lender or invest, not to replace the final terms you are offered.
+          </p>
+          <p>
+            If you already know how much you want to borrow, the{" "}
+            <Link href={calculatorPath(getCalculator("emi"))}>EMI calculator</Link> gives your monthly instalment, total
+            interest and a full amortization schedule. For personal, car, education or business loans, the{" "}
+            <Link href={calculatorPath(getCalculator("loan"))}>loan calculator</Link> lets you enter tenure in months and
+            compare offers on total repayment rather than EMI alone.
+          </p>
+          <p>
+            Buying a home usually raises two separate questions. The{" "}
+            <Link href={calculatorPath(getCalculator("home-loan"))}>home loan calculator</Link> starts from the property
+            price and shows the down payment, loan-to-value ratio and cash you need upfront. The{" "}
+            <Link href={calculatorPath(getCalculator("home-loan-emi"))}>home loan EMI calculator</Link> focuses on the
+            loan itself, showing how the rate and tenure change your EMI and the interest you pay over 20 or 30 years.
+          </p>
+          <p>
+            For saving and investing, the <Link href={calculatorPath(getCalculator("sip"))}>SIP calculator</Link>{" "}
+            estimates what a fixed monthly investment could grow to at a return you choose. Testing a few different
+            returns is more useful than relying on one number, because market-linked returns are never guaranteed.
+          </p>
+          <p>
+            The formulas, assumptions and rounding used by every calculator are explained on our{" "}
+            <Link href="/about#methodology">methodology page</Link>.
+          </p>
         </Container>
       </section>
 

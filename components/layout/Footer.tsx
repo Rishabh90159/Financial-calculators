@@ -56,6 +56,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/terms" className="text-ink-muted hover:text-brand hover:underline">
+                  Terms of use
+                </Link>
+              </li>
+              <li>
                 <a href={`tel:${siteConfig.contact.phone}`} className="text-ink-muted hover:text-brand hover:underline">
                   {siteConfig.contact.phoneDisplay}
                 </a>

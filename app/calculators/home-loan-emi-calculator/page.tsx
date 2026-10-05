@@ -7,7 +7,7 @@ const DESCRIPTION =
   "Calculate your home loan EMI, total interest and repayment schedule. Try ₹25 lakh to ₹1 crore loans and see how interest rate and tenure change what you pay.";
 
 export const metadata = buildMetadata({
-  title: "Home Loan EMI Calculator — EMI, Interest & Repayment Schedule",
+  title: "Home Loan EMI Calculator – EMI, Interest & Amortization",
   description: DESCRIPTION,
   path: "/calculators/home-loan-emi-calculator",
 });
