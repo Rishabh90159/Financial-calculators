@@ -164,7 +164,8 @@ export default function EmiCalculatorPage() {
         Taking a home loan? The <Link href="/calculators/home-loan-emi-calculator">Home Loan EMI Calculator</Link> adds
         quick amount presets and home-loan-specific guidance. For other loans, the{" "}
         <Link href="/calculators/loan-calculator">Loan Calculator</Link> lets you enter tenure in months and shows interest
-        as a share of the loan.
+        as a share of the loan. To see how much an extra payment would save, try the{" "}
+        <Link href="/calculators/loan-prepayment-calculator">Loan Prepayment Calculator</Link>.
       </p>
     </CalculatorPageLayout>
   );

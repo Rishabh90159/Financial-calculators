@@ -13,6 +13,7 @@ const COMPLETED_AFTER_MS = 4000;
  *  result_generated      — a valid result settles after the user stops changing inputs (debounced)
  *  calculator_completed  — once per view, when a valid result has stayed on screen after interaction
  *  scenario_changed      — preset buttons, unit toggles, optional sections
+ *  comparison_used       — scenario tables and side-by-side comparisons
  * Only the calculator id and interaction category are sent — never input values.
  */
 export function useCalculatorAnalytics(calculatorId: string, resultIsValid: boolean, resultKey: string) {
@@ -61,5 +62,11 @@ export function useCalculatorAnalytics(calculatorId: string, resultIsValid: bool
     [calculatorId, markInteraction],
   );
 
-  return { markInteraction, trackScenario };
+  /** A comparison view (scenario table, option A vs B, property check) was opened or used. */
+  const trackComparison = useCallback(() => {
+    markInteraction();
+    trackEvent("comparison_used", { calculator_id: calculatorId, scenario_type: "comparison" });
+  }, [calculatorId, markInteraction]);
+
+  return { markInteraction, trackScenario, trackComparison };
 }

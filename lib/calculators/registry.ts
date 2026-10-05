@@ -14,17 +14,17 @@ export type CalculatorId =
   | "loan"
   | "home-loan"
   | "home-loan-emi"
-  // Planned
+  | "home-loan-eligibility"
   | "home-affordability"
-  | "loan-eligibility"
-  | "rent-vs-buy"
   | "loan-prepayment"
+  | "rent-vs-buy"
   | "property-purchase-cost"
+  | "car-loan"
   | "salary"
+  // Planned
   | "income-tax"
   | "investment"
-  | "retirement"
-  | "car-loan";
+  | "retirement";
 
 export type CalculatorCategory = "loans" | "property" | "investing" | "tax-income";
 
@@ -47,7 +47,7 @@ export const CATEGORY_LABELS: Record<CalculatorCategory, string> = {
   loans: "Loans & EMI",
   property: "Property",
   investing: "Investing",
-  "tax-income": "Tax & income",
+  "tax-income": "Salary & tax",
 };
 
 export const CALCULATORS: readonly CalculatorEntry[] = [
@@ -60,7 +60,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     action: "Calculate EMI",
     category: "loans",
     status: "live",
-    related: ["home-loan-emi", "loan", "home-loan", "loan-prepayment"],
+    related: ["home-loan-emi", "loan", "car-loan", "loan-prepayment"],
   },
   {
     id: "sip",
@@ -71,7 +71,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     action: "Estimate SIP value",
     category: "investing",
     status: "live",
-    related: ["investment", "retirement", "emi"],
+    related: ["rent-vs-buy", "loan-prepayment", "investment", "retirement"],
   },
   {
     id: "loan",
@@ -82,7 +82,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     action: "Calculate loan cost",
     category: "loans",
     status: "live",
-    related: ["emi", "loan-eligibility", "car-loan", "loan-prepayment"],
+    related: ["emi", "car-loan", "loan-prepayment", "salary"],
   },
   {
     id: "home-loan",
@@ -93,7 +93,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     action: "Plan a home purchase",
     category: "property",
     status: "live",
-    related: ["home-loan-emi", "rent-vs-buy", "home-affordability", "property-purchase-cost"],
+    related: ["home-loan-emi", "property-purchase-cost", "loan-prepayment", "home-affordability"],
   },
   {
     id: "home-loan-emi",
@@ -104,69 +104,86 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     action: "Calculate home loan EMI",
     category: "property",
     status: "live",
-    related: ["home-loan", "home-affordability", "emi", "loan-prepayment"],
+    related: ["home-loan-eligibility", "home-loan", "loan-prepayment", "home-affordability"],
   },
-  // ---- Planned (not linked anywhere until status is "live") ----
+  {
+    id: "home-loan-eligibility",
+    slug: "home-loan-eligibility-calculator",
+    name: "Home Loan Eligibility Calculator",
+    description: "Estimate the home loan you may qualify for from your income, existing EMIs, age, rate and tenure.",
+    useCase: "How much home loan can I get on my salary?",
+    action: "Check loan eligibility",
+    category: "property",
+    status: "live",
+    related: ["home-affordability", "home-loan-emi", "salary", "property-purchase-cost"],
+  },
   {
     id: "home-affordability",
     slug: "home-affordability-calculator",
     name: "Home Affordability Calculator",
-    description: "Estimate the property price you can afford from income, savings and existing EMIs.",
-    useCase: "How expensive a home can I afford?",
+    description: "Find a comfortable property budget from your income, expenses, savings and emergency fund.",
+    useCase: "How much house can I afford without stretching my budget?",
+    action: "Check what I can afford",
     category: "property",
-    status: "planned",
-    related: ["home-loan", "home-loan-emi"],
-  },
-  {
-    id: "loan-eligibility",
-    slug: "loan-eligibility-calculator",
-    name: "Loan Eligibility Calculator",
-    description: "Estimate the maximum loan lenders may offer based on income and obligations.",
-    useCase: "How much can I borrow?",
-    category: "loans",
-    status: "planned",
-    related: ["loan", "emi"],
-  },
-  {
-    id: "rent-vs-buy",
-    slug: "rent-vs-buy-calculator",
-    name: "Rent vs Buy Calculator",
-    description: "Compare the long-term cost of renting against buying a home.",
-    useCase: "Should I rent or buy?",
-    category: "property",
-    status: "planned",
-    related: ["home-loan", "sip"],
+    status: "live",
+    related: ["property-purchase-cost", "home-loan-eligibility", "rent-vs-buy", "home-loan"],
   },
   {
     id: "loan-prepayment",
     slug: "loan-prepayment-calculator",
     name: "Loan Prepayment Calculator",
-    description: "See how part-prepayments reduce interest and tenure.",
-    useCase: "How much will I save by prepaying my loan?",
+    description: "See how a lump-sum or recurring prepayment cuts your interest, EMI or remaining tenure.",
+    useCase: "How much interest will I save by prepaying my loan?",
+    action: "Calculate prepayment savings",
     category: "loans",
-    status: "planned",
-    related: ["emi", "home-loan-emi"],
+    status: "live",
+    related: ["home-loan-emi", "emi", "sip", "home-loan"],
+  },
+  {
+    id: "rent-vs-buy",
+    slug: "rent-vs-buy-calculator",
+    name: "Rent vs Buy Calculator",
+    description: "Compare your estimated wealth after renting and investing versus buying with a home loan.",
+    useCase: "Am I better off renting or buying, on my own assumptions?",
+    action: "Compare rent and buy",
+    category: "property",
+    status: "live",
+    related: ["home-affordability", "property-purchase-cost", "sip", "home-loan-emi"],
   },
   {
     id: "property-purchase-cost",
     slug: "property-purchase-cost-calculator",
     name: "Property Purchase Cost Calculator",
-    description: "Total cost of buying property including duties and fees.",
-    useCase: "What will this property really cost me to buy?",
+    description: "Add up stamp duty, registration, fees and deposits to find the real cash needed to buy a home.",
+    useCase: "How much cash do I need upfront, beyond the down payment?",
+    action: "Calculate buying cost",
     category: "property",
-    status: "planned",
-    related: ["home-loan"],
+    status: "live",
+    related: ["home-loan", "home-affordability", "home-loan-eligibility", "rent-vs-buy"],
+  },
+  {
+    id: "car-loan",
+    slug: "car-loan-calculator",
+    name: "Car Loan Calculator",
+    description: "Car loan EMI, total interest and upfront cost from the on-road price, with tenure comparison.",
+    useCase: "What will my car loan cost each month and in total?",
+    action: "Calculate car EMI",
+    category: "loans",
+    status: "live",
+    related: ["emi", "loan", "loan-prepayment", "salary"],
   },
   {
     id: "salary",
     slug: "salary-calculator",
     name: "Salary Calculator",
-    description: "Convert CTC to in-hand monthly salary.",
-    useCase: "What is my take-home pay?",
+    description: "Convert CTC to in-hand salary after PF, professional tax and estimated income tax.",
+    useCase: "What is my take-home salary from my CTC?",
+    action: "Calculate take-home pay",
     category: "tax-income",
-    status: "planned",
-    related: ["income-tax"],
+    status: "live",
+    related: ["home-loan-eligibility", "home-affordability", "sip", "income-tax"],
   },
+  // ---- Planned (not linked anywhere until status is "live") ----
   {
     id: "income-tax",
     slug: "income-tax-calculator",
@@ -196,16 +213,6 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     category: "investing",
     status: "planned",
     related: ["sip", "investment"],
-  },
-  {
-    id: "car-loan",
-    slug: "car-loan-calculator",
-    name: "Car Loan Calculator",
-    description: "EMI and total cost of a car loan.",
-    useCase: "What will my car loan cost?",
-    category: "loans",
-    status: "planned",
-    related: ["loan", "emi"],
   },
 ];
 

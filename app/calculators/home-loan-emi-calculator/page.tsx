@@ -255,6 +255,13 @@ export default function HomeLoanEmiCalculatorPage() {
         <Link href="/calculators/home-loan-calculator">Home Loan Calculator</Link> helps you work backwards from the
         property price and down payment.
       </p>
+      <p>
+        Not sure how large a loan a lender will approve? The{" "}
+        <Link href="/calculators/home-loan-eligibility-calculator">Home Loan Eligibility Calculator</Link> estimates it from
+        your income and existing EMIs. If you already have a home loan, the{" "}
+        <Link href="/calculators/loan-prepayment-calculator">Loan Prepayment Calculator</Link> shows how much interest a
+        part-prepayment would save.
+      </p>
     </CalculatorPageLayout>
   );
 }

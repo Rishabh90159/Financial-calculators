@@ -18,7 +18,8 @@ function safe(n: number): number {
 
 /** ₹12,34,568 */
 export function formatINR(n: number): string {
-  return inr.format(Math.round(safe(n)));
+  // `|| 0` turns -0 (from tiny negative values) into 0 so "-₹0" is never shown.
+  return inr.format(Math.round(safe(n)) || 0);
 }
 
 /** ₹12,34,567.89 */

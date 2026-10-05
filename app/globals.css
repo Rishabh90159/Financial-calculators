@@ -128,6 +128,14 @@
   .prose-fin th {
     font-weight: 600;
   }
+  /* On phones, wide article tables scroll within themselves instead of widening the page. */
+  @media (max-width: 40rem) {
+    .prose-fin table {
+      display: block;
+      max-width: 100%;
+      overflow-x: auto;
+    }
+  }
   .prose-fin thead th {
     border-bottom-color: var(--color-line-strong);
     color: var(--color-ink-muted);

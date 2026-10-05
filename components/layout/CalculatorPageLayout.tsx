@@ -23,6 +23,16 @@ interface CalculatorPageLayoutProps {
   children: ReactNode;
   faqs: FaqItem[];
   investmentDisclaimer?: boolean;
+  /** References for factual, legal, tax or rate information used on the page. */
+  sources?: Source[];
+}
+
+export interface Source {
+  name: string;
+  /** Official page, when one exists. */
+  url?: string;
+  /** What the source is used for, or when it was last checked. */
+  detail?: string;
 }
 
 /**
@@ -38,6 +48,7 @@ export function CalculatorPageLayout({
   children,
   faqs,
   investmentDisclaimer,
+  sources,
 }: CalculatorPageLayoutProps) {
   const entry = getCalculator(id);
   return (
@@ -56,7 +67,7 @@ export function CalculatorPageLayout({
           <div className="mt-2 text-[1.0625rem] leading-relaxed text-ink-muted">{intro}</div>
           <p className="mt-2 text-sm text-ink-muted">
             Last reviewed <time dateTime={siteConfig.contentUpdated}>{formatDate(siteConfig.contentUpdated)}</time> ·{" "}
-            <Link href="/about#methodology" className="underline underline-offset-2 hover:text-brand">
+            <Link href="/methodology" className="underline underline-offset-2 hover:text-brand">
               How we calculate
             </Link>
           </p>
@@ -76,6 +87,34 @@ export function CalculatorPageLayout({
         <div className="mt-12">
           <RelatedCalculators id={id} />
         </div>
+        <section aria-labelledby="sources-heading" className="mt-12 max-w-3xl border-t border-line pt-6 text-sm text-ink-muted">
+          <h2 id="sources-heading" className="text-lg text-ink">
+            Sources and methodology
+          </h2>
+          {sources && sources.length > 0 && (
+            <ul className="mt-2 list-disc space-y-1 pl-5">
+              {sources.map((s) => (
+                <li key={s.name}>
+                  {s.url ? (
+                    <a href={s.url} className="text-brand underline underline-offset-2" rel="noopener noreferrer" target="_blank">
+                      {s.name}
+                    </a>
+                  ) : (
+                    <span className="text-ink">{s.name}</span>
+                  )}
+                  {s.detail && <> — {s.detail}</>}
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className="mt-2">
+            Formulas, rounding and the assumptions shared by every calculator are documented on our{" "}
+            <Link href="/methodology" className="text-brand underline underline-offset-2">
+              methodology page
+            </Link>
+            . Found an error? <Link href="/contact" className="text-brand underline underline-offset-2">Tell us</Link>.
+          </p>
+        </section>
       </Container>
     </>
   );

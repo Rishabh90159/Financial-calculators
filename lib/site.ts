@@ -20,7 +20,7 @@ export const siteConfig = {
   name: "MoneyMetric",
   tagline: "Financial calculations made simple.",
   description:
-    "Free, accurate financial calculators for EMI, SIP, personal loans and home loans. Clear formulas, amortization schedules and plain-language explanations.",
+    "Free financial calculators for EMI, home loans, eligibility, affordability, prepayment, rent vs buy, car loans, SIP and salary. Clear formulas and plain-language explanations.",
   url: resolveSiteUrl(),
   locale: "en_IN",
   contact: {
@@ -29,7 +29,7 @@ export const siteConfig = {
     phoneDisplay: "+91 97597 90159",
   },
   /** ISO date of the last substantive content review. Used in the sitemap. */
-  contentUpdated: "2026-10-05",
+  contentUpdated: "2026-10-06",
 } as const;
 
 /** Preview and development deployments must never be indexed. */

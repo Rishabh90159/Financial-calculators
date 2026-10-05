@@ -25,7 +25,7 @@ export default function TermsPage() {
       <h2>Estimates, not advice</h2>
       <p>
         Results are estimates based on the values you enter and the assumptions described in our{" "}
-        <Link href="/about#methodology">methodology</Link>. They are not financial, investment, tax, legal or lending
+        <Link href="/methodology">methodology</Link>. They are not financial, investment, tax, legal or lending
         advice, and they are not a quote or offer from any lender or product provider. You are responsible for any
         decision you make, and you should confirm final terms with your lender or a qualified professional. See the full{" "}
         <Link href="/disclaimer">disclaimer</Link>.

@@ -30,7 +30,7 @@ export default function DisclaimerPage() {
         loan EMIs, interest rates, fees, charges, taxes, stamp duty and registration costs depend on your lender, your
         credit profile, your loan agreement, the applicable laws and the state you are in, and they may change over time.
         Floating interest rates can change during the life of a loan. The assumptions behind each calculator are listed
-        in our <Link href="/about#methodology">methodology</Link>.
+        in our <Link href="/methodology">methodology</Link>.
       </p>
       <h2>Investment returns are not guaranteed</h2>
       <p>

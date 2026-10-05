@@ -11,7 +11,7 @@ export function Footer() {
   return (
     <footer className="mt-16 border-t border-line-strong bg-surface">
       <Container className="py-10">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_repeat(4,1fr)]">
+        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-[1.3fr_repeat(5,1fr)]">
           <div>
             <Logo />
             <p className="mt-3 max-w-xs text-sm text-ink-muted">{siteConfig.tagline} Transparent formulas, no sign-up, no data stored.</p>
@@ -42,7 +42,17 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/about" className="text-ink-muted hover:text-brand hover:underline">
-                  About &amp; methodology
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link href="/methodology" className="text-ink-muted hover:text-brand hover:underline">
+                  Methodology
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-ink-muted hover:text-brand hover:underline">
+                  Contact
                 </Link>
               </li>
               <li>

@@ -2,7 +2,14 @@ import Link from "next/link";
 import { Container } from "@/components/layout/Container";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { Faq } from "@/components/ui/Faq";
-import { calculatorPath, getCalculator, liveCalculators, type CalculatorId } from "@/lib/calculators/registry";
+import {
+  calculatorPath,
+  CATEGORY_LABELS,
+  getCalculator,
+  liveCalculators,
+  type CalculatorCategory,
+  type CalculatorId,
+} from "@/lib/calculators/registry";
 import { buildMetadata, faqJsonLd, type FaqItem } from "@/lib/seo";
 import { siteConfig } from "@/lib/site";
 
@@ -103,6 +110,8 @@ const STEPS = [
 
 export default function HomePage() {
   const calculators = liveCalculators();
+  const categoryOrder: CalculatorCategory[] = ["loans", "property", "investing", "tax-income"];
+  const categories = categoryOrder.filter((cat) => calculators.some((c) => c.category === cat));
 
   return (
     <>
@@ -189,26 +198,36 @@ export default function HomePage() {
             Calculators
           </h2>
           <p className="mt-1 max-w-2xl text-ink-muted">
-            Five focused tools, each built around one question people ask before borrowing or investing.
+            {calculators.length} focused tools, each built around one question people ask before borrowing, buying a home
+            or investing.
           </p>
-          <ul className="mt-5 divide-y divide-line border-y border-line-strong">
-            {calculators.map((c) => (
-              <li key={c.id}>
-                <Link
-                  href={calculatorPath(c)}
-                  className="group grid gap-1 py-4 hover:bg-surface sm:px-3 lg:grid-cols-[15rem_1fr_auto] lg:items-baseline lg:gap-6"
-                >
-                  <span className="font-serif text-lg font-semibold text-ink group-hover:text-brand">{c.name}</span>
-                  <span className="text-ink-muted">
-                    {c.description} <span className="text-sm">{c.useCase}</span>
-                  </span>
-                  <span className="text-sm font-semibold text-brand group-hover:underline group-hover:underline-offset-4">
-                    {c.action ?? `Open ${c.name}`} →
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {categories.map((cat) => (
+            <div key={cat} className="mt-6">
+              <h3 className="font-sans text-sm font-semibold uppercase tracking-wider text-ink-muted">
+                {CATEGORY_LABELS[cat]}
+              </h3>
+              <ul className="mt-2 divide-y divide-line border-y border-line-strong">
+                {calculators
+                  .filter((c) => c.category === cat)
+                  .map((c) => (
+                    <li key={c.id}>
+                      <Link
+                        href={calculatorPath(c)}
+                        className="group grid gap-1 py-3.5 hover:bg-surface sm:px-3 lg:grid-cols-[18rem_1fr_auto] lg:items-baseline lg:gap-6"
+                      >
+                        <span className="font-serif text-lg font-semibold text-ink group-hover:text-brand">{c.name}</span>
+                        <span className="text-ink-muted">
+                          {c.description} <span className="text-sm">{c.useCase}</span>
+                        </span>
+                        <span className="text-sm font-semibold text-brand group-hover:underline group-hover:underline-offset-4">
+                          {c.action ?? `Open ${c.name}`} →
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          ))}
         </Container>
       </section>
 
@@ -307,13 +326,32 @@ export default function HomePage() {
               loan itself, showing how the rate and tenure change your EMI and the interest you pay over 20 or 30 years.
             </p>
             <p>
+              Before you start looking at homes, the{" "}
+              <Link href={calculatorPath(getCalculator("home-affordability"))}>home affordability calculator</Link>{" "}
+              works out a comfortable budget from your take-home pay, expenses and savings, while the{" "}
+              <Link href={calculatorPath(getCalculator("home-loan-eligibility"))}>home loan eligibility calculator</Link>{" "}
+              estimates how much a lender may be willing to lend. The{" "}
+              <Link href={calculatorPath(getCalculator("property-purchase-cost"))}>property purchase cost calculator</Link>{" "}
+              adds up stamp duty, registration and other charges, and the{" "}
+              <Link href={calculatorPath(getCalculator("rent-vs-buy"))}>rent vs buy calculator</Link> compares where you
+              might stand after renting and investing instead. Already paying a loan? The{" "}
+              <Link href={calculatorPath(getCalculator("loan-prepayment"))}>loan prepayment calculator</Link> shows how
+              much interest an extra payment would save.
+            </p>
+            <p>
               For saving and investing, the <Link href={calculatorPath(getCalculator("sip"))}>SIP calculator</Link>{" "}
               estimates what a fixed monthly investment could grow to at a return you choose. Testing a few different
               returns is more useful than relying on one number, because market-linked returns are never guaranteed.
             </p>
             <p>
+              Buying a car? The <Link href={calculatorPath(getCalculator("car-loan"))}>car loan calculator</Link> compares
+              EMIs and total interest across tenures from the on-road price. And to see what your CTC means in your
+              bank account each month, the <Link href={calculatorPath(getCalculator("salary"))}>salary calculator</Link>{" "}
+              estimates take-home pay after PF, professional tax and income tax under the current slabs.
+            </p>
+            <p>
               The formulas, assumptions and rounding used by every calculator are explained on our{" "}
-              <Link href="/about#methodology">methodology page</Link>.
+              <Link href="/methodology">methodology page</Link>.
             </p>
           </div>
         </Container>

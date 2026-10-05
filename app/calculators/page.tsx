@@ -7,18 +7,25 @@ import { buildMetadata } from "@/lib/seo";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMetadata({
-  title: "All Financial Calculators – EMI, SIP, Loan & Home Loan",
+  title: "All Financial Calculators – Loans, Home Buying, SIP & Salary",
   description:
-    "All our free financial calculators in one place: EMI, SIP, personal loan, home loan and home loan EMI. Find the right tool for your question and get an answer in seconds.",
+    "Free financial calculators for EMI, home loans, eligibility, affordability, prepayment, rent vs buy, car loans, SIP and salary. Pick the one that answers your question.",
   path: "/calculators",
 });
 
 const CHOOSER = [
   { q: "I know my loan amount and want the monthly EMI", id: "emi" },
-  { q: "I want to compare personal, car or education loan offers", id: "loan" },
+  { q: "I want to compare personal, education or business loan offers", id: "loan" },
+  { q: "I am buying a car and want the EMI and total cost", id: "car-loan" },
+  { q: "I want to know how much I will save by prepaying my loan", id: "loan-prepayment" },
+  { q: "I want to know how much home I can comfortably afford", id: "home-affordability" },
+  { q: "I want to know how much home loan a bank may give me", id: "home-loan-eligibility" },
   { q: "I am buying a home and want to know the cash I need", id: "home-loan" },
   { q: "I want the EMI and schedule for a specific home loan", id: "home-loan-emi" },
+  { q: "I want the full cost of buying, including stamp duty and fees", id: "property-purchase-cost" },
+  { q: "I cannot decide whether to rent or buy", id: "rent-vs-buy" },
   { q: "I want to see how a monthly investment could grow", id: "sip" },
+  { q: "I want to know my in-hand salary from my CTC", id: "salary" },
 ] as const;
 
 export default function CalculatorsPage() {

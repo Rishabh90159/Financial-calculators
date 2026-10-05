@@ -170,8 +170,10 @@ export default function LoanCalculatorPage() {
         </li>
       </ul>
       <p>
-        Buying a home? Use the <Link href="/calculators/home-loan-calculator">Home Loan Calculator</Link>, which also
-        works out down payment, loan-to-value and upfront cash.
+        Financing a car? The <Link href="/calculators/car-loan-calculator">Car Loan Calculator</Link> starts from the
+        on-road price and compares tenures from three to seven years. Buying a home? Use the{" "}
+        <Link href="/calculators/home-loan-calculator">Home Loan Calculator</Link>, which also works out down payment,
+        loan-to-value and upfront cash.
       </p>
     </CalculatorPageLayout>
   );

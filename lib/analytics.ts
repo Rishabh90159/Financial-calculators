@@ -13,12 +13,22 @@ export type AnalyticsEvent =
   | "calculator_start"
   | "result_generated"
   | "calculator_completed"
-  | "scenario_changed";
+  | "scenario_changed"
+  | "comparison_used";
 
 export interface AnalyticsParams {
   calculator_id: string;
   /** Coarse category of interaction, never a value. */
-  scenario_type?: "preset" | "tenure_unit" | "costs_toggle" | "schedule_view" | "slider" | "input";
+  scenario_type?:
+    | "preset"
+    | "tenure_unit"
+    | "costs_toggle"
+    | "schedule_view"
+    | "slider"
+    | "input"
+    | "option_toggle"
+    | "mode_switch"
+    | "comparison";
 }
 
 declare global {

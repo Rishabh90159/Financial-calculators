@@ -180,6 +180,12 @@ export default function HomeLoanCalculatorPage() {
         <Link href="/calculators/home-loan-emi-calculator">Home Loan EMI Calculator</Link> focuses on EMI, interest and
         repayment schedule, with quick presets for common loan sizes.
       </p>
+      <p>
+        For a full list of buying costs, including GST on under-construction homes, brokerage and loan fees, use the{" "}
+        <Link href="/calculators/property-purchase-cost-calculator">Property Purchase Cost Calculator</Link>. Once the
+        loan is running, the <Link href="/calculators/loan-prepayment-calculator">Loan Prepayment Calculator</Link> shows
+        how extra payments shorten it.
+      </p>
     </CalculatorPageLayout>
   );
 }
