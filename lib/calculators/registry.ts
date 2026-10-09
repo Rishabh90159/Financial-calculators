@@ -41,6 +41,11 @@ export interface CalculatorEntry {
   category: CalculatorCategory;
   status: "live" | "planned";
   related: CalculatorId[];
+  /**
+   * ISO date of this page's last substantive content change. Falls back to
+   * `siteConfig.contentUpdated`. Drives the sitemap <lastmod> and the "Last reviewed" line.
+   */
+  contentUpdated?: string;
 }
 
 export const CATEGORY_LABELS: Record<CalculatorCategory, string> = {
@@ -66,12 +71,13 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     id: "sip",
     slug: "sip-calculator",
     name: "SIP Calculator",
-    description: "Estimate how a fixed monthly investment could grow over time at an assumed rate of return.",
+    description: "Estimate how a monthly investment could grow at an assumed return, with optional yearly step-up and inflation adjustment.",
     useCase: "How much could my monthly SIP be worth after a number of years?",
     action: "Estimate SIP value",
     category: "investing",
     status: "live",
-    related: ["rent-vs-buy", "loan-prepayment", "investment", "retirement"],
+    related: ["salary", "loan-prepayment", "rent-vs-buy", "investment", "retirement"],
+    contentUpdated: "2026-10-09",
   },
   {
     id: "loan",
@@ -105,6 +111,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     category: "property",
     status: "live",
     related: ["home-loan-eligibility", "home-loan", "loan-prepayment", "home-affordability"],
+    contentUpdated: "2026-10-09",
   },
   {
     id: "home-loan-eligibility",
@@ -116,6 +123,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     category: "property",
     status: "live",
     related: ["home-affordability", "home-loan-emi", "salary", "property-purchase-cost"],
+    contentUpdated: "2026-10-09",
   },
   {
     id: "home-affordability",
@@ -182,6 +190,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     category: "tax-income",
     status: "live",
     related: ["home-loan-eligibility", "home-affordability", "sip", "income-tax"],
+    contentUpdated: "2026-10-09",
   },
   // ---- Planned (not linked anywhere until status is "live") ----
   {

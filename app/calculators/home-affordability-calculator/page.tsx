@@ -4,7 +4,7 @@ import { CalculatorPageLayout, type Source } from "@/components/layout/Calculato
 import { buildMetadata, type FaqItem } from "@/lib/seo";
 
 const DESCRIPTION =
-  "Find how much house you can afford in India from your take-home salary, expenses, savings and emergency fund — with EMI, down payment and upfront cash.";
+  "Home loan affordability calculator: see how much house you can afford from your take-home pay, expenses and savings, with EMI, down payment and upfront cash.";
 
 export const metadata = buildMetadata({
   title: "Home Affordability Calculator – How Much House Can I Afford?",

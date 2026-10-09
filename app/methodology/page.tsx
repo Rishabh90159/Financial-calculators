@@ -130,7 +130,10 @@ export default function MethodologyPage() {
       <p>
         The <CalcLink id="sip" /> treats each instalment as invested at the start of the month and compounds it at the
         expected annual return ÷ 12: FV = P × [(1 + i)<sup>n</sup> − 1] ÷ i × (1 + i). The return is an assumption you
-        choose, not a forecast, and results are before tax and exit loads.
+        choose, not a forecast, and results are before tax and exit loads. With an optional annual step-up, the
+        instalment for each later year is P × (1 + step-up)<sup>year</sup> and the value is built month by month on the
+        same start-of-month basis. The optional inflation figure only restates the result in today&apos;s money as FV ÷
+        (1 + inflation)<sup>years</sup>; it never changes the nominal estimate.
       </p>
 
       <h2>Salary and tax</h2>

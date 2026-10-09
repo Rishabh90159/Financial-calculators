@@ -6,10 +6,10 @@ import { formatDate } from "@/lib/format";
 import { buildMetadata, type FaqItem } from "@/lib/seo";
 
 const DESCRIPTION =
-  "Convert your CTC to monthly in-hand salary after PF, professional tax and income tax. Compare the new and old tax regimes for FY 2026-27 with a full breakup.";
+  "Free in-hand salary calculator for India: convert CTC to monthly take-home pay after PF, professional tax and income tax. New vs old regime, FY 2026-27.";
 
 export const metadata = buildMetadata({
-  title: "Salary Calculator – Calculate Take-Home Salary from CTC",
+  title: "In-Hand Salary Calculator India – CTC to Take-Home (FY 2026-27)",
   description: DESCRIPTION,
   path: "/calculators/salary-calculator",
 });
@@ -17,6 +17,11 @@ export const metadata = buildMetadata({
 const SOURCES: Source[] = [
   { name: TAX_RULES.source.name, url: TAX_RULES.source.url, detail: TAX_RULES.source.detail },
   { name: "EPFO — Employees' Provident Fund Organisation", url: "https://www.epfindia.gov.in", detail: "PF contribution rates and wage ceiling" },
+  {
+    name: "Ministry of Labour & Employment — Labour Codes",
+    url: "https://labour.gov.in",
+    detail: "Code on Wages definition of wages (the 50% rule), in force from 21 November 2025",
+  },
   { name: "State professional tax schedules", detail: "professional tax varies by state; enter the amount on your payslip" },
 ];
 
@@ -56,6 +61,21 @@ const FAQS: FaqItem[] = [
     answer:
       "No. When gratuity is included in CTC, it is an amount set aside for you and paid only when you leave after completing the qualifying period of service. It does not appear in monthly pay, so including it in CTC lowers your monthly gross salary.",
   },
+  {
+    question: "What is the in-hand salary for 25 LPA?",
+    answer:
+      "On the calculator's default structure (basic 40% of CTC, PF at 12% of basic from both sides, ₹2,400 professional tax), a ₹25 lakh CTC gives about ₹1,64,192 a month under the new regime, after annual income tax of about ₹2,87,300. A higher basic, gratuity in CTC or variable pay would lower the monthly figure.",
+  },
+  {
+    question: "How much is 4 lakh per annum per month?",
+    answer:
+      "₹4 lakh a year is ₹33,333 a month before deductions. On the default structure, about ₹29,933 reaches your bank account each month: employer and employee PF and professional tax are deducted, and no income tax is payable under the new regime at this level.",
+  },
+  {
+    question: "Do the new Labour Codes change my in-hand salary?",
+    answer:
+      "They can. Under the Code on Wages, in force since 21 November 2025, allowances excluded from 'wages' generally cannot exceed 50% of total pay, and any excess counts as wages for PF and gratuity. If your employer raises basic pay to meet this, PF and gratuity rise and monthly take-home usually falls even though CTC is unchanged. Set the basic percentage in the calculator to match your revised payslip.",
+  },
 ];
 
 export default function SalaryCalculatorPage() {
@@ -66,8 +86,8 @@ export default function SalaryCalculatorPage() {
       intro={
         <p>
           Find out how much of your CTC reaches your bank account each month. Enter your CTC and salary structure to see
-          your monthly take-home after PF, professional tax and estimated income tax, with a full breakup and a new vs old
-          regime comparison for {TAX_RULES.taxYear}.
+          your monthly in-hand salary after PF, professional tax and estimated income tax, with a full breakup and a new
+          vs old regime comparison for {TAX_RULES.taxYear}.
         </p>
       }
       schemaDescription="Converts annual CTC to monthly in-hand salary after employer and employee PF, gratuity, professional tax and estimated income tax under India's new and old tax regimes."
@@ -97,8 +117,15 @@ export default function SalaryCalculatorPage() {
       <h2>Components of CTC</h2>
       <h3>Basic salary</h3>
       <p>
-        Basic is the fixed core of your pay, usually 40–50% of CTC. Many other components are worked out from it, so a
-        higher basic raises PF and gratuity and leaves less room for allowances.
+        Basic is the fixed core of your pay, traditionally 40–50% of CTC. Many other components are worked out from it,
+        so a higher basic raises PF and gratuity and leaves less room for allowances.
+      </p>
+      <p>
+        Under the Code on Wages, in force since 21 November 2025, allowances that are excluded from &ldquo;wages&rdquo;
+        generally cannot exceed 50% of total remuneration; any excess is treated as wages for PF and gratuity. Many
+        employers are therefore moving basic pay (with dearness allowance) to about half of pay. The calculator defaults
+        to 40% so its examples stay comparable, but if your payslip shows a higher basic, enter it: on a ₹12 lakh CTC, a
+        50% basic lowers monthly take-home from about ₹90,200 to about ₹87,800 because more goes to PF.
       </p>
       <h3>House rent allowance (HRA)</h3>
       <p>
@@ -144,6 +171,11 @@ export default function SalaryCalculatorPage() {
         The calculator applies the slab rates for {TAX_RULES.taxYear} for a resident individual below 60, last verified
         on {formatDate(TAX_RULES.lastVerified)}. Tax rules change each year, so check the tax year shown above against
         the year you are planning for.
+      </p>
+      <p>
+        From 1 April 2026, the Income-tax Act, 2025 replaces the Income-tax Act, 1961 and renumbers many provisions. The
+        slab rates, rebate and standard deduction used here carry over unchanged. This page keeps the familiar section
+        names, such as 87A and 80C, because they still appear on most payslips and investment declarations.
       </p>
       <h3>New regime slabs (default)</h3>
       <table>
@@ -261,8 +293,8 @@ export default function SalaryCalculatorPage() {
         on these inputs the new regime leaves about ₹10,592 a month more.
       </p>
 
-      <h2>Take-home at common CTC levels</h2>
-      <p>Same structure as the worked example, new regime:</p>
+      <h2>In-hand salary at common CTC levels (LPA)</h2>
+      <p>Same structure as the worked example, new regime. Enter your own CTC above for an exact figure.</p>
       <table>
         <caption className="sr-only">Estimated monthly take-home and annual income tax by CTC, new regime</caption>
         <thead>
@@ -277,10 +309,16 @@ export default function SalaryCalculatorPage() {
           </tr>
         </thead>
         <tbody>
+          <tr><td>₹4 lakh</td><td className="num">₹29,933</td><td className="num">₹0</td></tr>
           <tr><td>₹6 lakh</td><td className="num">₹45,000</td><td className="num">₹0</td></tr>
+          <tr><td>₹7 lakh</td><td className="num">₹52,533</td><td className="num">₹0</td></tr>
+          <tr><td>₹8 lakh</td><td className="num">₹60,067</td><td className="num">₹0</td></tr>
           <tr><td>₹10 lakh</td><td className="num">₹75,133</td><td className="num">₹0</td></tr>
+          <tr><td>₹12 lakh</td><td className="num">₹90,200</td><td className="num">₹0</td></tr>
           <tr><td>₹15 lakh</td><td className="num">₹1,05,611</td><td className="num">₹86,268</td></tr>
+          <tr><td>₹20 lakh</td><td className="num">₹1,36,097</td><td className="num">₹1,72,432</td></tr>
           <tr><td>₹25 lakh</td><td className="num">₹1,64,192</td><td className="num">₹2,87,300</td></tr>
+          <tr><td>₹30 lakh</td><td className="num">₹1,89,894</td><td className="num">₹4,30,872</td></tr>
           <tr><td>₹50 lakh</td><td className="num">₹2,91,057</td><td className="num">₹10,24,920</td></tr>
         </tbody>
       </table>

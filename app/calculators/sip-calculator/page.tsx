@@ -1,18 +1,36 @@
 import Link from "next/link";
 import { SipCalculator } from "@/components/calculators/SipCalculator";
-import { CalculatorPageLayout } from "@/components/layout/CalculatorPageLayout";
+import { CalculatorPageLayout, type Source } from "@/components/layout/CalculatorPageLayout";
 import { buildMetadata, type FaqItem } from "@/lib/seo";
 
 const DESCRIPTION =
-  "Estimate how much a monthly SIP could grow to. Enter your monthly investment, expected return and duration to see total invested, estimated returns and future value.";
+  "Free SIP calculator for mutual fund SIP returns. Add a yearly step-up and inflation to see amount invested, estimated returns and value in today's money.";
 
 export const metadata = buildMetadata({
-  title: "SIP Calculator – Calculate SIP Returns & Future Value",
+  title: "SIP Calculator – SIP Return Calculator with Step-Up & Inflation",
   description: DESCRIPTION,
   path: "/calculators/sip-calculator",
 });
 
+const SOURCES: Source[] = [
+  {
+    name: "Ministry of Finance (Department of Economic Affairs) — inflation target notification, March 2026",
+    detail:
+      "CPI inflation target of 4% with a 2–6% tolerance band for April 2026 to March 2031; used only as a reference point for the inflation input",
+  },
+  {
+    name: "SEBI — investor education on mutual funds",
+    url: "https://investor.sebi.gov.in",
+    detail: "mutual fund investments are subject to market risk; past performance does not indicate future returns",
+  },
+];
+
 const FAQS: FaqItem[] = [
+  {
+    question: "What is the interest rate on a SIP?",
+    answer:
+      "A SIP has no interest rate. It is a way of buying mutual fund units every month, so its return depends on how the fund's investments perform, and that changes every year. The expected return in this calculator is an assumption you choose to illustrate compounding, not a rate any fund pays or promises.",
+  },
   {
     question: "What is a SIP?",
     answer:
@@ -34,6 +52,21 @@ const FAQS: FaqItem[] = [
       "Statements usually report XIRR, an annualised return that accounts for the exact date and amount of every instalment and the fund's actual day-to-day performance. This calculator projects a smooth, assumed return, so the two will rarely match exactly.",
   },
   {
+    question: "How does the SIP calculator with inflation work?",
+    answer:
+      "Enter an expected inflation rate and the calculator divides the future value by (1 + inflation) raised to the number of years. The result is what that future amount could buy at today's prices. For example, ₹23.2 lakh in 10 years is worth about ₹13 lakh today if inflation averages 6% a year.",
+  },
+  {
+    question: "What is a step-up SIP?",
+    answer:
+      "A step-up (or top-up) SIP raises the monthly instalment by a fixed percentage every year, for example in line with salary increases. A ₹10,000 SIP stepped up by 10% a year for 10 years could grow to about ₹33.7 lakh at an assumed 12%, against about ₹23.2 lakh without the step-up, partly because you also invest more: ₹19.1 lakh instead of ₹12 lakh.",
+  },
+  {
+    question: "What is ₹1,000 a month in a SIP worth after 5 years?",
+    answer:
+      "You would invest ₹60,000. At an assumed 12% a year it could grow to about ₹82,486; at a lower return it would be less. This is an illustration, not a forecast, because actual mutual fund returns vary.",
+  },
+  {
     question: "Does this calculator include tax or fund expenses?",
     answer:
       "No. The result is before capital-gains tax, exit loads and other charges. Fund expense ratios are already reflected in a fund's NAV, so use a return assumption that is net of those costs.",
@@ -52,14 +85,15 @@ export default function SipCalculatorPage() {
       h1="SIP Calculator"
       intro={
         <p>
-          See what a fixed monthly investment could grow to over time. Enter how much you plan to invest each month, the
-          return you expect, and for how long. The result is an <strong>estimate based on your assumption</strong>, not a
-          prediction.
+          Estimate what a monthly mutual fund SIP could grow to. Enter how much you plan to invest each month, the return
+          you expect and for how long. Optionally, add a yearly step-up and an inflation rate to see the result in
+          today&apos;s money. The result is an <strong>estimate based on your assumptions</strong>, not a prediction.
         </p>
       }
       schemaDescription={DESCRIPTION}
       calculator={<SipCalculator />}
       faqs={FAQS}
+      sources={SOURCES}
       investmentDisclaimer
     >
       <h2>How the SIP future value is calculated</h2>
@@ -96,6 +130,40 @@ export default function SipCalculatorPage() {
       <p>
         You invest ₹12,00,000 in total, and the estimated returns are about ₹11,23,391, nearly as much as you put in.
       </p>
+
+      <h2>Small SIPs add up too</h2>
+      <p>The same formula at an assumed 12% a year, for smaller amounts:</p>
+      <table>
+        <caption className="sr-only">Estimated value of smaller monthly SIPs at 12%</caption>
+        <thead>
+          <tr>
+            <th scope="col">Monthly SIP · Duration</th>
+            <th scope="col" className="num">
+              Invested
+            </th>
+            <th scope="col" className="num">
+              Estimated value
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>₹1,000 · 5 years</td>
+            <td className="num">₹60,000</td>
+            <td className="num">₹82,486</td>
+          </tr>
+          <tr>
+            <td>₹1,000 · 10 years</td>
+            <td className="num">₹1,20,000</td>
+            <td className="num">₹2,32,339</td>
+          </tr>
+          <tr>
+            <td>₹5,000 · 10 years</td>
+            <td className="num">₹6,00,000</td>
+            <td className="num">₹11,61,695</td>
+          </tr>
+        </tbody>
+      </table>
 
       <h2>Why time matters more than you might expect</h2>
       <p>
@@ -139,6 +207,64 @@ export default function SipCalculatorPage() {
         it is worth testing several return assumptions.
       </p>
 
+      <h2>Step-up SIP: increasing your SIP every year</h2>
+      <p>
+        With a step-up, the monthly instalment rises by a fixed percentage once a year. The calculator invests each
+        year&apos;s higher instalment at the start of every month, compounds it at the same assumed return, and adds the
+        years together. For ₹10,000 a month over 10 years at an assumed 12%:
+      </p>
+      <table>
+        <caption className="sr-only">Effect of an annual step-up on a ₹10,000 SIP over 10 years at 12%</caption>
+        <thead>
+          <tr>
+            <th scope="col">Annual step-up</th>
+            <th scope="col" className="num">
+              Invested
+            </th>
+            <th scope="col" className="num">
+              Estimated value
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>None</td>
+            <td className="num">₹12,00,000</td>
+            <td className="num">₹23,23,391</td>
+          </tr>
+          <tr>
+            <td>5% a year</td>
+            <td className="num">₹15,09,347</td>
+            <td className="num">₹27,86,942</td>
+          </tr>
+          <tr>
+            <td>10% a year</td>
+            <td className="num">₹19,12,491</td>
+            <td className="num">₹33,74,326</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        Much of the extra value comes from the extra money you put in, so compare the invested column as well as the
+        final value.
+      </p>
+
+      <h2>SIP calculator with inflation: value in today&apos;s money</h2>
+      <p>
+        A rupee in 20 years will buy less than a rupee today. To show the purchasing power of your future corpus, the
+        calculator deflates it by the inflation rate you enter:
+      </p>
+      <p className="formula">
+        Value in today&apos;s money = FV ÷ (1 + inflation)<sup>years</sup>
+      </p>
+      <p>
+        ₹10,000 a month for 20 years at an assumed 12% gives an estimated ₹99,91,479. If inflation averages 6% a year,
+        that is worth about <strong>₹31.2 lakh</strong> at today&apos;s prices; at 4%, about ₹45.6 lakh. The nominal
+        figure does not change; only its purchasing power is shown. India&apos;s official CPI inflation target is 4%,
+        within a 2–6% band, but actual inflation can be higher or lower, so try more than one rate when planning for a
+        goal such as retirement or a child&apos;s education.
+      </p>
+
       <h2>What affects your SIP outcome</h2>
       <h3>Monthly amount</h3>
       <p>The future value scales directly with the instalment. Twice the SIP gives twice the estimated corpus.</p>
@@ -154,8 +280,8 @@ export default function SipCalculatorPage() {
       </p>
       <h3>Costs, taxes and inflation</h3>
       <p>
-        Results here are before tax on gains. Inflation also reduces what the final amount can buy. ₹1 crore in 20 years
-        will buy much less than ₹1 crore today.
+        Results here are before tax on gains. Inflation also reduces what the final amount can buy; use the optional
+        inflation input to see the result in today&apos;s money.
       </p>
 
       <h2>Practical tips</h2>
@@ -176,8 +302,12 @@ export default function SipCalculatorPage() {
         </li>
       </ul>
       <p>
-        Planning a home purchase as well? See how investing compares with borrowing costs using the{" "}
-        <Link href="/calculators/emi-calculator">EMI Calculator</Link>.
+        Not sure how much you can invest each month? The{" "}
+        <Link href="/calculators/salary-calculator">in-hand salary calculator</Link> shows your take-home pay from your
+        CTC. If you have a home loan, the <Link href="/calculators/loan-prepayment-calculator">loan prepayment
+        calculator</Link> compares prepaying with investing the same money, and the{" "}
+        <Link href="/calculators/rent-vs-buy-calculator">rent vs buy calculator</Link> shows how investing the difference
+        affects the decision to buy a home.
       </p>
     </CalculatorPageLayout>
   );

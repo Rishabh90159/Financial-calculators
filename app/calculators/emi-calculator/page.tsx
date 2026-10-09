@@ -4,10 +4,10 @@ import { CalculatorPageLayout } from "@/components/layout/CalculatorPageLayout";
 import { buildMetadata, type FaqItem } from "@/lib/seo";
 
 const DESCRIPTION =
-  "Calculate your monthly EMI, total interest and total repayment for any loan. See the reducing-balance formula, a worked example and a full amortization schedule.";
+  "Free loan EMI calculator: find the monthly EMI, total interest and repayment for any loan, with the reducing-balance formula and a full amortization schedule.";
 
 export const metadata = buildMetadata({
-  title: "EMI Calculator – Calculate Monthly EMI & Interest",
+  title: "EMI Calculator – Loan EMI, Interest & Amortization Schedule",
   description: DESCRIPTION,
   path: "/calculators/emi-calculator",
 });

@@ -19,6 +19,11 @@ const FAQS: FaqItem[] = [
       "With a take-home salary of ₹1 lakh, no other EMIs and a lender allowing 50% of income for EMIs, your maximum EMI is about ₹50,000. At 8.5% for 20 years, that supports a loan of roughly ₹57.6 lakh. A ₹10,000 car or personal loan EMI would bring it down to about ₹46.1 lakh. Lenders' own FOIR limits and income definitions can move this figure either way.",
   },
   {
+    question: "How much home loan can I get on a ₹40,000 salary?",
+    answer:
+      "With a take-home salary of ₹40,000, no other EMIs and a 50% FOIR, your maximum EMI is about ₹20,000. At 8.5% for 20 years that supports a loan of roughly ₹23 lakh, and on a ₹30,000 salary roughly ₹17.3 lakh. Lenders' FOIR limits, the rate you are offered and your age can move this either way.",
+  },
+  {
     question: "What is FOIR in a home loan?",
     answer:
       "FOIR (Fixed Obligation to Income Ratio) is the share of your monthly income that all your EMIs and fixed obligations, including the new home loan EMI, may take up. It is a lender's internal policy, not a regulatory rule, so the limit varies between lenders, and many allow a higher share at higher incomes. This calculator uses 50% by default and lets you change it.",
@@ -27,6 +32,16 @@ const FAQS: FaqItem[] = [
     question: "Does my age affect home loan eligibility?",
     answer:
       "Yes. Most lenders want the loan repaid by a set age, commonly around retirement for salaried borrowers and somewhat later for self-employed borrowers. The older you are, the shorter the tenure available, and a shorter tenure means a smaller loan for the same EMI. At 45, a loan that must end by 60 can run only 15 years.",
+  },
+  {
+    question: "What is the maximum tenure for a home loan?",
+    answer:
+      "Many lenders offer home loans of up to 30 years, and some offer longer. In practice the tenure is also limited by the age by which the loan must be repaid, commonly around 60 to 70 depending on the lender and whether you are salaried or self-employed. This calculator caps the tenure at the repayment age you set, 60 by default.",
+  },
+  {
+    question: "Is there a minimum salary for a home loan?",
+    answer:
+      "There is no regulatory minimum; each lender sets its own income criteria, which vary by lender, city and type of employment. What usually limits a lower salary is the loan amount: at 50% FOIR, a ₹20,000 take-home salary supports an EMI of about ₹10,000, or roughly ₹11.5 lakh at 8.5% over 20 years.",
   },
   {
     question: "Can I add my spouse's income to increase eligibility?",
@@ -209,6 +224,30 @@ export default function HomeLoanEligibilityCalculatorPage() {
         </thead>
         <tbody>
           <tr>
+            <td>₹20,000</td>
+            <td className="num">₹10,000</td>
+            <td className="num">₹11,52,308</td>
+            <td className="num">₹14,40,385</td>
+          </tr>
+          <tr>
+            <td>₹25,000</td>
+            <td className="num">₹12,500</td>
+            <td className="num">₹14,40,385</td>
+            <td className="num">₹18,00,482</td>
+          </tr>
+          <tr>
+            <td>₹30,000</td>
+            <td className="num">₹15,000</td>
+            <td className="num">₹17,28,463</td>
+            <td className="num">₹21,60,578</td>
+          </tr>
+          <tr>
+            <td>₹40,000</td>
+            <td className="num">₹20,000</td>
+            <td className="num">₹23,04,617</td>
+            <td className="num">₹28,80,771</td>
+          </tr>
+          <tr>
             <td>₹50,000</td>
             <td className="num">₹25,000</td>
             <td className="num">₹28,80,771</td>
@@ -241,8 +280,10 @@ export default function HomeLoanEligibilityCalculatorPage() {
         </tbody>
       </table>
       <p>
-        Property budgets use 80% LTV up to ₹75 lakh of loan and the RBI limit of 75% above that, so at higher salaries
-        a larger share of the price has to come from your down payment. If you know only your CTC, the{" "}
+        Property budgets use the calculator&apos;s default 80% LTV up to ₹75 lakh of loan and the RBI limit of 75% above
+        that, so at higher salaries a larger share of the price has to come from your down payment. For loans up to ₹30
+        lakh, RBI allows up to 90% LTV, so with a lender that finances 90% the budget on a smaller salary can be higher
+        than shown; set the LTV in the calculator to check. If you know only your CTC, the{" "}
         <Link href="/calculators/salary-calculator">Salary Calculator</Link> can help estimate your take-home pay first.
       </p>
 

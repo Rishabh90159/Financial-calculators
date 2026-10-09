@@ -14,11 +14,16 @@ export function SipCalculator() {
   const [monthly, setMonthly] = useState(10_000);
   const [annualReturn, setAnnualReturn] = useState(12);
   const [years, setYears] = useState(10);
+  const [stepUp, setStepUp] = useState(0);
+  const [inflation, setInflation] = useState(0);
 
-  const input = useMemo(() => ({ monthlyInvestment: monthly, annualReturn, years }), [monthly, annualReturn, years]);
+  const input = useMemo(
+    () => ({ monthlyInvestment: monthly, annualReturn, years, annualStepUp: stepUp, inflationRate: inflation }),
+    [monthly, annualReturn, years, stepUp, inflation],
+  );
   const result = useMemo(() => calculateSip(input), [input]);
   const growth = useMemo(() => buildSipGrowth(input), [input]);
-  const { markInteraction } = useCalculatorAnalytics("sip", result.isValid, `${monthly}|${annualReturn}|${years}`);
+  const { markInteraction } = useCalculatorAnalytics("sip", result.isValid, `${monthly}|${annualReturn}|${years}|${stepUp}|${inflation}`);
 
   const multiple = result.totalInvested > 0 ? result.futureValue / result.totalInvested : 0;
 
@@ -62,6 +67,28 @@ export function SipCalculator() {
               onInteract={markInteraction}
               hint={`${formatMonths(result.months)} of monthly instalments.`}
             />
+            <NumberField
+              label="Annual step-up (optional)"
+              suffix="%"
+              min={0}
+              max={25}
+              step={1}
+              value={stepUp}
+              onChange={setStepUp}
+              onInteract={markInteraction}
+              hint="Raise the monthly SIP by this much every year, e.g. in line with salary hikes. 0% keeps it flat."
+            />
+            <NumberField
+              label="Expected inflation (optional)"
+              suffix="%"
+              min={0}
+              max={15}
+              step={0.5}
+              value={inflation}
+              onChange={setInflation}
+              onInteract={markInteraction}
+              hint="Shows what the final amount is worth in today's money. RBI's CPI inflation target is 4%."
+            />
           </>
         }
         results={
@@ -73,13 +100,22 @@ export function SipCalculator() {
                     emphasis
                     label="Estimated total value"
                     value={formatINR(result.futureValue)}
-                    note={`About ${multiple.toFixed(2)}× the amount invested, if returns average ${annualReturn}% a year.`}
+                    note={`About ${multiple.toFixed(2)}× the amount invested, if returns average ${annualReturn}% a year${stepUp > 0 ? ` and the SIP rises ${stepUp}% each year` : ""}.`}
                   />
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-x-5 gap-y-2">
                   <ResultStat swatch="principal" label="Invested amount" value={formatINR(result.totalInvested)} />
                   <ResultStat swatch="interest" label="Estimated returns" value={formatINR(result.estimatedReturns)} />
                 </div>
+                {inflation > 0 && (
+                  <div className="mt-3 border-t border-line pt-3">
+                    <ResultStat
+                      label="Value in today's money"
+                      value={formatINR(result.inflationAdjustedValue)}
+                      note={`What ${formatINRCompact(result.futureValue)} in ${years} years could buy today, if inflation averages ${inflation}% a year.`}
+                    />
+                  </div>
+                )}
               </dl>
               <DonutChart
                 primary={{ label: "Invested", value: result.totalInvested }}

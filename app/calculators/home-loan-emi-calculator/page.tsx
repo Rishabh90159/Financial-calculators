@@ -4,15 +4,20 @@ import { CalculatorPageLayout } from "@/components/layout/CalculatorPageLayout";
 import { buildMetadata, type FaqItem } from "@/lib/seo";
 
 const DESCRIPTION =
-  "Calculate your home loan EMI, total interest and repayment schedule. Try ₹25 lakh to ₹1 crore loans and see how interest rate and tenure change what you pay.";
+  "Calculate your home loan EMI, total interest and repayment schedule. See EMIs for ₹20 lakh to ₹1 crore housing loans and how rate and tenure change them.";
 
 export const metadata = buildMetadata({
-  title: "Home Loan EMI Calculator – EMI, Interest & Amortization",
+  title: "Home Loan EMI Calculator – Housing Loan EMI & Repayment Schedule",
   description: DESCRIPTION,
   path: "/calculators/home-loan-emi-calculator",
 });
 
 const FAQS: FaqItem[] = [
+  {
+    question: "What is the EMI for a ₹30 lakh home loan?",
+    answer:
+      "At 8.5% for 20 years, the EMI on a ₹30 lakh home loan is about ₹26,035 a month, with total interest of about ₹32.5 lakh. A ₹20 lakh loan on the same terms has an EMI of about ₹17,356. Use the calculator with the rate you are offered for an exact figure.",
+  },
   {
     question: "What is the EMI for a ₹50 lakh home loan?",
     answer:
@@ -52,8 +57,8 @@ export default function HomeLoanEmiCalculatorPage() {
       h1="Home Loan EMI Calculator"
       intro={
         <p>
-          Calculate the monthly EMI on your home loan in seconds. Pick a quick amount or enter your own, then adjust the
-          interest rate and tenure to see your EMI, total interest and year-by-year repayment schedule.
+          Calculate the monthly EMI on your home loan or housing loan in seconds. Pick a quick amount or enter your own,
+          then adjust the interest rate and tenure to see your EMI, total interest and year-by-year repayment schedule.
         </p>
       }
       schemaDescription={DESCRIPTION}
@@ -112,9 +117,19 @@ export default function HomeLoanEmiCalculatorPage() {
         </thead>
         <tbody>
           <tr>
+            <td>₹20 lakh</td>
+            <td className="num">₹17,356</td>
+            <td className="num">₹21,65,552</td>
+          </tr>
+          <tr>
             <td>₹25 lakh</td>
             <td className="num">₹21,696</td>
             <td className="num">₹27,06,939</td>
+          </tr>
+          <tr>
+            <td>₹30 lakh</td>
+            <td className="num">₹26,035</td>
+            <td className="num">₹32,48,327</td>
           </tr>
           <tr>
             <td>₹50 lakh</td>
@@ -258,9 +273,9 @@ export default function HomeLoanEmiCalculatorPage() {
       <p>
         Not sure how large a loan a lender will approve? The{" "}
         <Link href="/calculators/home-loan-eligibility-calculator">Home Loan Eligibility Calculator</Link> estimates it from
-        your income and existing EMIs. If you already have a home loan, the{" "}
-        <Link href="/calculators/loan-prepayment-calculator">Loan Prepayment Calculator</Link> shows how much interest a
-        part-prepayment would save.
+        your income and existing EMIs. To see your EMI with prepayment, use the{" "}
+        <Link href="/calculators/loan-prepayment-calculator">home loan prepayment calculator</Link>: it shows how much
+        interest a lump-sum or yearly part-payment saves and how many years it cuts from the loan.
       </p>
     </CalculatorPageLayout>
   );

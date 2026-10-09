@@ -4,10 +4,10 @@ import { CalculatorPageLayout } from "@/components/layout/CalculatorPageLayout";
 import { buildMetadata, type FaqItem } from "@/lib/seo";
 
 const DESCRIPTION =
-  "Work out how much interest a lump-sum or yearly loan prepayment saves, compare reducing tenure with reducing EMI, and weigh prepaying against investing.";
+  "See how much interest a lump-sum or yearly prepayment saves on your home loan, compare reducing tenure vs EMI, and weigh prepaying against investing.";
 
 export const metadata = buildMetadata({
-  title: "Loan Prepayment Calculator – Calculate Interest & EMI Savings",
+  title: "Home Loan Prepayment Calculator – Interest & Tenure Savings",
   description: DESCRIPTION,
   path: "/calculators/loan-prepayment-calculator",
 });

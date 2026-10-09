@@ -51,6 +51,7 @@ export function CalculatorPageLayout({
   sources,
 }: CalculatorPageLayoutProps) {
   const entry = getCalculator(id);
+  const reviewed = entry.contentUpdated ?? siteConfig.contentUpdated;
   return (
     <>
       <JsonLd data={[calculatorAppJsonLd(entry, schemaDescription), faqJsonLd(faqs)]} />
@@ -66,7 +67,7 @@ export function CalculatorPageLayout({
           <h1 className="text-[1.875rem] font-semibold sm:text-[2.25rem]">{h1}</h1>
           <div className="mt-2 text-[1.0625rem] leading-relaxed text-ink-muted">{intro}</div>
           <p className="mt-2 text-sm text-ink-muted">
-            Last reviewed <time dateTime={siteConfig.contentUpdated}>{formatDate(siteConfig.contentUpdated)}</time> ·{" "}
+            Last reviewed <time dateTime={reviewed}>{formatDate(reviewed)}</time> ·{" "}
             <Link href="/methodology" className="underline underline-offset-2 hover:text-brand">
               How we calculate
             </Link>

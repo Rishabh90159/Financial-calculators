@@ -11,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: absoluteUrl("/calculators"), lastModified, changeFrequency: "monthly", priority: 0.9 },
     ...liveCalculators().map((c) => ({
       url: absoluteUrl(calculatorPath(c)),
-      lastModified,
+      lastModified: new Date(c.contentUpdated ?? siteConfig.contentUpdated),
       changeFrequency: "monthly" as const,
       priority: 0.8,
     })),
