@@ -111,7 +111,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     category: "property",
     status: "live",
     related: ["home-loan-eligibility", "home-loan", "loan-prepayment", "home-affordability"],
-    contentUpdated: "2026-10-09",
+    contentUpdated: "2026-10-18",
   },
   {
     id: "home-loan-eligibility",

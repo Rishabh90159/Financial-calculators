@@ -3,6 +3,7 @@ import { calculatorPath, CATEGORY_LABELS, getCalculator, liveCalculators, type C
 import { siteConfig } from "@/lib/site";
 import { Container } from "./Container";
 import { Logo } from "./Logo";
+import { MobileMenu } from "./MobileMenu";
 
 const SITE_LINKS = [
   { href: "/about", label: "About" },
@@ -20,7 +21,8 @@ const FEATURED: { id: CalculatorId; label: string }[] = [
 
 /**
  * Site header. The mobile menu is a native <details> disclosure, so navigation
- * works with zero client JavaScript. A few featured calculators are linked on wide
+ * works with zero client JavaScript; MobileMenu closes it after navigation once
+ * hydrated. A few featured calculators are linked on wide
  * screens; the mobile menu lists every calculator, grouped by category.
  */
 export function Header() {
@@ -58,13 +60,16 @@ export function Header() {
           </ul>
         </nav>
 
-        <details className="group relative md:hidden">
-          <summary className="flex cursor-pointer list-none items-center gap-2 rounded-md border border-line-strong px-3 py-1.5 text-sm font-semibold [&::-webkit-details-marker]:hidden">
-            Menu
-            <span aria-hidden="true" className="text-ink-muted group-open:rotate-180">
-              ▾
-            </span>
-          </summary>
+        <MobileMenu
+          summary={
+            <summary className="flex cursor-pointer list-none items-center gap-2 rounded-md border border-line-strong px-3 py-1.5 text-sm font-semibold [&::-webkit-details-marker]:hidden">
+              Menu
+              <span aria-hidden="true" className="text-ink-muted group-open:rotate-180">
+                ▾
+              </span>
+            </summary>
+          }
+        >
           <nav
             aria-label="Main"
             className="absolute right-0 z-20 mt-2 max-h-[calc(100dvh-5rem)] w-[min(18rem,calc(100vw-2rem))] overflow-y-auto rounded-md border border-line-strong bg-surface py-2 shadow-[0_4px_12px_rgb(18_32_47/0.08)]"
@@ -100,7 +105,7 @@ export function Header() {
               ))}
             </ul>
           </nav>
-        </details>
+        </MobileMenu>
       </Container>
     </header>
   );

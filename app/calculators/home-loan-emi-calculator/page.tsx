@@ -4,10 +4,10 @@ import { CalculatorPageLayout } from "@/components/layout/CalculatorPageLayout";
 import { buildMetadata, type FaqItem } from "@/lib/seo";
 
 const DESCRIPTION =
-  "Calculate your home loan EMI, total interest and repayment schedule. See EMIs for ₹20 lakh to ₹1 crore housing loans and how rate and tenure change them.";
+  "Calculate your monthly home loan EMI, total interest and total repayment, with a full repayment schedule. See EMIs for ₹20 lakh to ₹1 crore loans at 8.5%.";
 
 export const metadata = buildMetadata({
-  title: "Home Loan EMI Calculator – Housing Loan EMI & Repayment Schedule",
+  title: "Home Loan EMI Calculator India – Monthly EMI & Interest",
   description: DESCRIPTION,
   path: "/calculators/home-loan-emi-calculator",
 });
@@ -34,6 +34,16 @@ const FAQS: FaqItem[] = [
       "Most floating-rate home loans are linked to an external benchmark such as the RBI repo rate. When the benchmark changes, the lender resets your rate. Many lenders keep the EMI the same and adjust the remaining tenure instead, unless you ask for the EMI to change. Check your lender's reset policy.",
   },
   {
+    question: "Why is my bank's EMI slightly different from this calculator?",
+    answer:
+      "Usually because of rounding, or because interest for the days between disbursement and your first EMI date (broken-period interest) is collected separately or added to the first instalment. A larger gap usually means the rate, tenure or loan amount differs from what you entered, for example because insurance was financed into the loan.",
+  },
+  {
+    question: "What is pre-EMI on a home loan?",
+    answer:
+      "When you buy an under-construction home, the lender releases the loan in stages as construction progresses. Until full EMIs start, many lenders let you pay only the interest on the amount disbursed so far, called pre-EMI. Pre-EMI does not reduce the principal. This calculator shows the full EMI that applies once the whole loan is disbursed and repayment begins.",
+  },
+  {
     question: "Does home loan EMI include insurance and processing fees?",
     answer:
       "No. The EMI covers principal and interest only. Processing fees are paid separately, and home or loan-protection insurance is either paid separately or, if financed, increases the loan amount and therefore the EMI.",
@@ -57,8 +67,9 @@ export default function HomeLoanEmiCalculatorPage() {
       h1="Home Loan EMI Calculator"
       intro={
         <p>
-          Calculate the monthly EMI on your home loan or housing loan in seconds. Pick a quick amount or enter your own,
-          then adjust the interest rate and tenure to see your EMI, total interest and year-by-year repayment schedule.
+          Calculate the monthly EMI on your home loan or housing loan. Enter the loan amount, annual interest rate and
+          tenure to see your <strong>monthly EMI, total interest and total amount payable</strong>, with a year-by-year
+          or month-by-month repayment schedule.
         </p>
       }
       schemaDescription={DESCRIPTION}
@@ -259,6 +270,23 @@ export default function HomeLoanEmiCalculatorPage() {
         <li>
           <strong>Review your rate periodically.</strong> If your spread is high compared with new-customer offers, ask
           your lender for a reset or consider a balance transfer after accounting for fees.
+        </li>
+      </ul>
+
+      <h2>Assumptions and limitations</h2>
+      <ul>
+        <li>
+          The interest rate stays the same for the whole tenure. Most home loans in India are floating-rate, so your
+          actual EMI or tenure will change when the rate is reset.
+        </li>
+        <li>
+          The full loan is disbursed at the start and the first EMI falls one month later. Pre-EMI during construction
+          and broken-period interest are not included.
+        </li>
+        <li>The EMI covers principal and interest only, not processing fees, insurance or other charges.</li>
+        <li>
+          Calculations use full precision. Results are rounded to the nearest rupee for display, and the final EMI is
+          adjusted so the balance ends at exactly zero.
         </li>
       </ul>
 

@@ -159,7 +159,8 @@ export default function LoanCalculatorPage() {
         </li>
         <li>
           <strong>Choose the shortest affordable tenure</strong>, and prepay when you can if the lender&apos;s
-          prepayment charges are low.
+          prepayment charges are low. The <Link href="/calculators/loan-prepayment-calculator">loan prepayment
+          calculator</Link> shows how much interest a part-payment saves, net of any fee.
         </li>
         <li>
           <strong>Compare total cost across lenders</strong>, including processing fees and insurance, not the EMI alone.

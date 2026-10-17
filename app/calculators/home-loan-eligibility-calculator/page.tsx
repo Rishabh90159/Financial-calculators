@@ -7,7 +7,7 @@ const DESCRIPTION =
   "Estimate how much home loan you can get on your salary. See your max EMI, eligible loan and property budget from income, existing EMIs, age, tenure and rate.";
 
 export const metadata = buildMetadata({
-  title: "Home Loan Eligibility Calculator – Check Eligibility by Salary",
+  title: "Home Loan Eligibility Calculator – Check Loan Amount by Salary",
   description: DESCRIPTION,
   path: "/calculators/home-loan-eligibility-calculator",
 });
@@ -436,7 +436,9 @@ export default function HomeLoanEligibilityCalculatorPage() {
         Being eligible for a loan does not mean the EMI will be comfortable. Use the{" "}
         <Link href="/calculators/home-affordability-calculator">Home Affordability Calculator</Link> to check a budget
         against your expenses and savings, and the <Link href="/calculators/home-loan-emi-calculator">Home Loan EMI
-        Calculator</Link> to see the repayment schedule for the loan you choose.
+        Calculator</Link> to see the repayment schedule for the loan you choose. Once you have a property in mind, the{" "}
+        <Link href="/calculators/home-loan-calculator">Home Loan Calculator</Link> works out the down payment, loan
+        amount and total upfront cash from its price.
       </p>
     </CalculatorPageLayout>
   );
