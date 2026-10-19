@@ -14,6 +14,7 @@ import { clamp, LIMITS, monthlyRate, toNonNegative, yearsToMonths } from "./util
  *    the loan (in both strategies).
  *
  * Each simulated month m (1-based, month 1 = the next EMI):
+ *   EMI      ×= (1 + step-up)               (only when m = 13, 25, 37 …, and only with prepayments)
  *   interest  = balance × r                 (r = annual rate ÷ 12 ÷ 100)
  *   principal = min(balance, EMI − interest) (the final instalment is trimmed to clear the balance)
  *   balance  −= principal
@@ -44,6 +45,11 @@ export interface LoanPrepaymentInput {
   extraMonthly?: number;
   /** Optional prepayment fee as a percent of each prepaid amount. */
   feePercent?: number;
+  /**
+   * Optional yearly EMI increase in percent. The EMI in force rises by this much at the start of
+   * every loan year (months 13, 25, …). It is a higher EMI, not a prepayment, so no fee applies.
+   */
+  emiStepUpPercent?: number;
 }
 
 export interface StrategyResult {
@@ -85,10 +91,11 @@ export interface LoanPrepaymentResult {
   firstPrepaymentMonth: number;
   extraMonthly: number;
   feePercent: number;
+  emiStepUpPercent: number;
   original: { totalInterest: number; totalPayment: number; months: number };
   reduceTenure: StrategyResult;
   reduceEmi: StrategyResult;
-  /** True when at least one rupee of prepayment is applied. */
+  /** True when at least one rupee of prepayment is applied or the EMI steps up. */
   hasPrepayment: boolean;
   isValid: boolean;
   /** Human-readable notes about ignored or capped inputs. */
@@ -110,6 +117,8 @@ interface SimulationConfig {
   extraMonthly: number;
   feeRate: number;
   recomputeEmi: boolean;
+  /** Yearly EMI increase as a decimal (0.05 = 5%). */
+  stepUpRate: number;
 }
 
 interface SimulationOutcome {
@@ -144,6 +153,8 @@ function simulate(cfg: SimulationConfig): SimulationOutcome {
 
   for (let month = 1; month <= cfg.n && balance > 0; month++) {
     months = month;
+    // Step-up at the start of each new loan year, on whatever EMI is then in force.
+    if (cfg.stepUpRate > 0 && month > 1 && (month - 1) % 12 === 0) emi *= 1 + cfg.stepUpRate;
     finalEmi = emi;
     const interest = balance * cfg.r;
     const isLast = month === cfg.n;
@@ -200,6 +211,7 @@ export function calculateLoanPrepayment(input: LoanPrepaymentInput): LoanPrepaym
   const firstPrepaymentMonth = Math.max(1, Math.round(clamp(toNonNegative(input.firstPrepaymentMonth), 1, LIMITS.maxTenureMonths + 1)));
   const extraMonthly = clamp(toNonNegative(input.extraMonthly), 0, LIMITS.maxAmount);
   const feePercent = clamp(toNonNegative(input.feePercent), 0, 100);
+  const emiStepUpPercent = clamp(toNonNegative(input.emiStepUpPercent), 0, 50);
 
   const isValid = outstanding > 0 && remainingMonths > 0;
   const currentEmi = isValid ? calculateEmiAmount(outstanding, annualRate, remainingMonths) : 0;
@@ -217,6 +229,7 @@ export function calculateLoanPrepayment(input: LoanPrepaymentInput): LoanPrepaym
     extraMonthly: 0,
     feeRate: feePercent / 100,
     recomputeEmi: false,
+    stepUpRate: 0,
   };
 
   const original = simulate(base);
@@ -229,6 +242,7 @@ export function calculateLoanPrepayment(input: LoanPrepaymentInput): LoanPrepaym
     ...base,
     lumpSum: lumpSumScheduled ? prepaymentAmount : 0,
     extraMonthly: isValid ? extraMonthly : 0,
+    stepUpRate: isValid ? emiStepUpPercent / 100 : 0,
   };
   const tenureRun = simulate(withPrepayment);
   const emiRun = simulate({ ...withPrepayment, recomputeEmi: true });
@@ -256,7 +270,7 @@ export function calculateLoanPrepayment(input: LoanPrepaymentInput): LoanPrepaym
 
   const reduceTenure = toStrategy("reduce-tenure", tenureRun);
   const reduceEmi = toStrategy("reduce-emi", emiRun);
-  const hasPrepayment = tenureRun.totalPrepaid > 0;
+  const hasPrepayment = tenureRun.totalPrepaid > 0 || (isValid && emiStepUpPercent > 0 && remainingMonths > 12);
 
   if (isValid && lumpSumScheduled && tenureRun.lumpSumsApplied === 0) {
     notes.push("The loan is fully repaid by your extra monthly payments before the first lump sum is due.");
@@ -278,6 +292,7 @@ export function calculateLoanPrepayment(input: LoanPrepaymentInput): LoanPrepaym
     firstPrepaymentMonth,
     extraMonthly,
     feePercent,
+    emiStepUpPercent,
     original: {
       totalInterest: original.totalInterest,
       totalPayment: original.totalEmiPaid,

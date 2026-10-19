@@ -111,7 +111,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     category: "property",
     status: "live",
     related: ["home-loan-eligibility", "home-loan", "loan-prepayment", "home-affordability"],
-    contentUpdated: "2026-10-18",
+    contentUpdated: "2026-10-19",
   },
   {
     id: "home-loan-eligibility",
@@ -123,7 +123,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     category: "property",
     status: "live",
     related: ["home-affordability", "home-loan-emi", "salary", "property-purchase-cost"],
-    contentUpdated: "2026-10-09",
+    contentUpdated: "2026-10-19",
   },
   {
     id: "home-affordability",
@@ -146,6 +146,7 @@ export const CALCULATORS: readonly CalculatorEntry[] = [
     category: "loans",
     status: "live",
     related: ["home-loan-emi", "emi", "sip", "home-loan"],
+    contentUpdated: "2026-10-19",
   },
   {
     id: "rent-vs-buy",

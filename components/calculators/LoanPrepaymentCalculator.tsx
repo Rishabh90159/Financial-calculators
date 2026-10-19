@@ -70,6 +70,7 @@ export function LoanPrepaymentCalculator() {
   const [firstMonth, setFirstMonth] = useState(1);
   const [extraMonthly, setExtraMonthly] = useState(0);
   const [feePercent, setFeePercent] = useState(0);
+  const [stepUp, setStepUp] = useState(0);
   const [strategy, setStrategy] = useState<PrepaymentStrategy>("reduce-tenure");
   const [expectedReturn, setExpectedReturn] = useState(10);
   const [taxOnGains, setTaxOnGains] = useState(0);
@@ -77,8 +78,17 @@ export function LoanPrepaymentCalculator() {
   const monthIndex = useSyncExternalStore(noopSubscribe, getMonthIndex, getServerMonthIndex);
 
   const shared = useMemo(
-    () => ({ outstanding, annualRate: rate, remainingYears: years, frequency, firstPrepaymentMonth: firstMonth, extraMonthly, feePercent }),
-    [outstanding, rate, years, frequency, firstMonth, extraMonthly, feePercent],
+    () => ({
+      outstanding,
+      annualRate: rate,
+      remainingYears: years,
+      frequency,
+      firstPrepaymentMonth: firstMonth,
+      extraMonthly,
+      feePercent,
+      emiStepUpPercent: stepUp,
+    }),
+    [outstanding, rate, years, frequency, firstMonth, extraMonthly, feePercent, stepUp],
   );
   const result = useMemo(() => calculateLoanPrepayment({ ...shared, prepaymentAmount: prepayment }), [shared, prepayment]);
 
@@ -117,7 +127,7 @@ export function LoanPrepaymentCalculator() {
   const { markInteraction, trackScenario, trackComparison } = useCalculatorAnalytics(
     "loan-prepayment",
     result.isValid,
-    `${outstanding}|${rate}|${years}|${prepayment}|${frequency}|${firstMonth}|${extraMonthly}|${feePercent}|${strategy}`,
+    `${outstanding}|${rate}|${years}|${prepayment}|${frequency}|${firstMonth}|${extraMonthly}|${feePercent}|${stepUp}|${strategy}`,
   );
   const comparisonTracked = useRef(false);
   function handleComparisonInteract() {
@@ -128,8 +138,15 @@ export function LoanPrepaymentCalculator() {
 
   const selected: StrategyResult = strategy === "reduce-tenure" ? result.reduceTenure : result.reduceEmi;
   const remainingMonths = yearsToMonths(years);
-  const emiChanges =
-    strategy === "reduce-emi" && Math.abs(result.reduceEmi.finalEmi - result.reduceEmi.emiAfterFirstPrepayment) >= 1;
+  const steppedUp = result.emiStepUpPercent > 0 && result.isValid;
+  const emiChanges = Math.abs(selected.finalEmi - selected.emiAfterFirstPrepayment) >= 1;
+  const tenureNote = steppedUp
+    ? `Loan ends ${formatMonths(selected.monthsSaved)} earlier as your EMI rises ${formatPercent(result.emiStepUpPercent)} a year.`
+    : `Loan ends ${formatMonths(selected.monthsSaved)} earlier, with the same EMI.`;
+  const emiNote =
+    selected.lumpSumsApplied > 0
+      ? `EMI drops to ${formatINRPrecise(selected.emiAfterFirstPrepayment)} after the first prepayment.`
+      : tenureNote;
 
   function strategyRow(label: string, s: StrategyResult, value: PrepaymentStrategy): ScenarioRow {
     return {
@@ -252,6 +269,17 @@ export function LoanPrepaymentCalculator() {
               hint="Paid on top of the EMI from month 1. Always shortens the loan."
             />
             <NumberField
+              label="Increase EMI every year (optional)"
+              suffix="%"
+              min={0}
+              max={20}
+              step={1}
+              value={stepUp}
+              onChange={setStepUp}
+              onInteract={markInteraction}
+              hint="Raises your EMI by this much at the start of each loan year, e.g. in line with pay rises. Ask your lender how to increase your EMI."
+            />
+            <NumberField
               label="Prepayment fee"
               suffix="%"
               min={0}
@@ -260,7 +288,7 @@ export function LoanPrepaymentCalculator() {
               value={feePercent}
               onChange={setFeePercent}
               onInteract={markInteraction}
-              hint="Many lenders do not charge on floating-rate home loans to individuals; fixed-rate and other loans may carry a fee — check your loan agreement."
+              hint="RBI rules bar charges on floating-rate home loans and other non-business loans to individuals. Fixed-rate loans may carry a fee: check your loan agreement."
             />
             <div className="border-t border-line pt-5">
               <SegmentedControl
@@ -287,10 +315,10 @@ export function LoanPrepaymentCalculator() {
                     !result.isValid
                       ? "Enter your outstanding balance and remaining tenure."
                       : !result.hasPrepayment
-                        ? "Add a prepayment amount or an extra monthly payment to see the saving."
+                        ? "Add a prepayment, an extra monthly payment or a yearly EMI increase to see the saving."
                         : strategy === "reduce-tenure"
-                          ? `Loan ends ${formatMonths(selected.monthsSaved)} earlier, with the same EMI.`
-                          : `EMI drops to ${formatINRPrecise(selected.emiAfterFirstPrepayment)} after the first prepayment.`
+                          ? tenureNote
+                          : emiNote
                   }
                 />
               </div>
@@ -312,7 +340,7 @@ export function LoanPrepaymentCalculator() {
                   <ResultStat
                     label="Time saved"
                     value={formatMonths(selected.monthsSaved)}
-                    note={`EMI stays ${formatINR(result.currentEmi)}.`}
+                    note={steppedUp ? `EMI starts at ${formatINR(result.currentEmi)}.` : `EMI stays ${formatINR(result.currentEmi)}.`}
                   />
                 ) : (
                   <ResultStat
@@ -321,7 +349,13 @@ export function LoanPrepaymentCalculator() {
                     note={`Was ${formatINR(result.currentEmi)}.`}
                   />
                 )}
-                {emiChanges && <ResultStat label="Final EMI" value={formatINR(selected.finalEmi)} note="After the last yearly prepayment." />}
+                {emiChanges && (
+                  <ResultStat
+                    label="Final EMI"
+                    value={formatINR(selected.finalEmi)}
+                    note={steppedUp ? "In the last year, after the yearly increases." : "After the last yearly prepayment."}
+                  />
+                )}
                 <ResultStat label="Original payoff" value={formatMonths(result.original.months)} note={payoffDate(monthIndex, result.original.months) ?? undefined} />
                 <ResultStat label="New payoff" value={formatMonths(selected.months)} note={payoffDate(monthIndex, selected.months) ?? undefined} />
               </div>
@@ -387,7 +421,7 @@ export function LoanPrepaymentCalculator() {
       <CalculatorSection
         id="prepay-amounts"
         title="Savings at different prepayment amounts"
-        description="Uses your other inputs: balance, rate, tenure, frequency, first month, extra monthly payment and fee."
+        description="Uses your other inputs: balance, rate, tenure, frequency, first month, extra monthly payment, yearly EMI increase and fee."
       >
         <ScenarioTable
           caption="Interest saved and EMI for different prepayment amounts"
@@ -483,6 +517,10 @@ export function LoanPrepaymentCalculator() {
           <li>
             With &ldquo;Reduce EMI&rdquo;, the EMI is recalculated after each lump sum over the months left in the
             original tenure. Extra monthly payments never change the EMI; they shorten the loan.
+          </li>
+          <li>
+            A yearly EMI increase applies from month 13, then every 12 months, to the EMI in force at the time. It is
+            a higher EMI rather than a prepayment, so no prepayment fee is charged on it.
           </li>
           <li>Prepayment fees are paid separately, as a percentage of each amount prepaid, including extra monthly payments.</li>
           <li>Tax benefits, processing charges and changes in your loan rate are not included.</li>

@@ -1,10 +1,28 @@
 import Link from "next/link";
 import { LoanPrepaymentCalculator } from "@/components/calculators/LoanPrepaymentCalculator";
 import { CalculatorPageLayout } from "@/components/layout/CalculatorPageLayout";
+import { calculateLoanPrepayment, type LoanPrepaymentInput } from "@/lib/calculations/loanPrepayment";
+import { formatINR, formatMonths } from "@/lib/format";
 import { buildMetadata, type FaqItem } from "@/lib/seo";
 
 const DESCRIPTION =
-  "See how much interest a lump-sum or yearly prepayment saves on your home loan, compare reducing tenure vs EMI, and weigh prepaying against investing.";
+  "See how much interest a lump-sum prepayment or a yearly EMI increase saves on your home loan, compare reducing tenure vs EMI, and weigh prepaying vs investing.";
+
+/** The page's running example: ₹30 lakh left at 8.5% with 15 years to go. */
+const EXAMPLE: LoanPrepaymentInput = {
+  outstanding: 30_00_000,
+  annualRate: 8.5,
+  remainingYears: 15,
+  prepaymentAmount: 0,
+  frequency: "once",
+  firstPrepaymentMonth: 1,
+};
+
+/** Computed with the calculator's own engine at build time, so the article always matches the tool. */
+const STEP_UPS = [3, 5, 7.5, 10].map((pct) => ({ pct, result: calculateLoanPrepayment({ ...EXAMPLE, emiStepUpPercent: pct }) }));
+const STEP5 = calculateLoanPrepayment({ ...EXAMPLE, emiStepUpPercent: 5 });
+const STEP5_WITH_LUMP = calculateLoanPrepayment({ ...EXAMPLE, prepaymentAmount: 2_00_000, emiStepUpPercent: 5 });
+const BASE_EMI = STEP5.currentEmi;
 
 export const metadata = buildMetadata({
   title: "Home Loan Prepayment Calculator – Reduce EMI or Tenure",
@@ -26,7 +44,11 @@ const FAQS: FaqItem[] = [
   {
     question: "Is there a penalty for prepaying a home loan?",
     answer:
-      "The RBI has directed that lenders should not charge foreclosure or prepayment penalties on floating-rate term loans taken by individuals for purposes other than business. Fixed-rate loans, loans for business purposes and some other products may carry a charge. Check your loan agreement or ask your lender before you prepay.",
+      "Not on a floating-rate loan taken by an individual for a non-business purpose, such as a home loan. Under the RBI's Pre-payment Charges on Loans Directions, 2025, which apply to loans sanctioned or renewed on or after 1 January 2026, lenders cannot charge for part or full prepayment of such loans, with no minimum lock-in period, whatever the source of the money. Older loans were already covered by earlier RBI instructions. Fixed-rate loans can carry a charge under the lender's own policy, and any charge must be disclosed in the sanction letter and loan agreement.",
+  },
+  {
+    question: "Can I increase my EMI instead of making a lump-sum prepayment?",
+    answer: `Yes, many lenders let you raise your EMI on request, and the effect builds up quickly. On a ₹30 lakh balance at 8.5% with 15 years left, raising the EMI of ${formatINR(BASE_EMI)} by 5% at the start of each year closes the loan in ${formatMonths(STEP5.reduceTenure.months)} instead of 15 years and saves about ${formatINR(STEP5.reduceTenure.interestSaved)} in interest. A higher EMI is not a prepayment, so no prepayment charge applies. Check how your lender handles an EMI increase.`,
   },
   {
     question: "When is the best time to prepay a loan?",
@@ -58,8 +80,8 @@ export default function LoanPrepaymentCalculatorPage() {
       intro={
         <p>
           See how much interest you save by paying extra towards your home loan or any other EMI-based loan. Enter your
-          outstanding balance, rate and remaining tenure, add a one-time or yearly prepayment, and compare cutting your
-          tenure with cutting your EMI.
+          outstanding balance, rate and remaining tenure, add a one-time or yearly prepayment or a yearly EMI increase,
+          and compare cutting your tenure with cutting your EMI.
         </p>
       }
       schemaDescription={DESCRIPTION}
@@ -67,10 +89,10 @@ export default function LoanPrepaymentCalculatorPage() {
       faqs={FAQS}
       sources={[
         {
-          name: "Reserve Bank of India",
-          url: "https://www.rbi.org.in",
+          name: "Reserve Bank of India — (Pre-payment Charges on Loans) Directions, 2025",
+          url: "https://www.rbi.org.in/scripts/NotificationUser.aspx?Id=12878&Mode=0",
           detail:
-            "Directions to lenders on foreclosure charges and prepayment penalties on floating-rate term loans to individual borrowers. Search the RBI notifications for the latest circular.",
+            "RBI/2025-26/64, 2 July 2025. Applies to loans sanctioned or renewed on or after 1 January 2026. Checked 19 October 2026.",
         },
         {
           name: "Income Tax Department, Government of India",
@@ -110,6 +132,57 @@ export default function LoanPrepaymentCalculatorPage() {
         lender later to reduce the EMI if your circumstances change, subject to their policy.
       </p>
 
+      <h2>Increase your EMI every year instead</h2>
+      <p>
+        If you do not have a lump sum, raising your EMI a little each year, for example in line with your pay rise,
+        can cut years off the loan. Every extra rupee in the EMI goes to principal, and the increases compound. Set
+        &ldquo;Increase EMI every year&rdquo; in the calculator to see the effect on your own loan.
+      </p>
+      <p>
+        On the ₹30 lakh balance at 8.5% with 15 years left, the EMI starts at {formatINR(BASE_EMI)} and rises at the
+        start of each loan year. There is no lump sum:
+      </p>
+      <table>
+        <caption className="sr-only">Effect of a yearly EMI increase on a ₹30 lakh loan at 8.5% with 15 years left</caption>
+        <thead>
+          <tr>
+            <th scope="col">Yearly EMI increase</th>
+            <th scope="col" className="num">
+              Loan closes in
+            </th>
+            <th scope="col" className="num">
+              EMI in the last year
+            </th>
+            <th scope="col" className="num">
+              Interest saved
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>None</td>
+            <td className="num">{formatMonths(STEP5.original.months)}</td>
+            <td className="num">{formatINR(BASE_EMI)}</td>
+            <td className="num">—</td>
+          </tr>
+          {STEP_UPS.map(({ pct, result }) => (
+            <tr key={pct}>
+              <td>{pct}% a year</td>
+              <td className="num">{formatMonths(result.reduceTenure.months)}</td>
+              <td className="num">{formatINR(result.reduceTenure.finalEmi)}</td>
+              <td className="num">{formatINR(result.reduceTenure.interestSaved)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p>
+        Combining the two works best. A ₹2 lakh prepayment now plus a 5% yearly EMI increase closes the loan in{" "}
+        {formatMonths(STEP5_WITH_LUMP.reduceTenure.months)} and saves about{" "}
+        {formatINR(STEP5_WITH_LUMP.reduceTenure.interestSaved)}. An EMI increase is not a prepayment, so no prepayment
+        charge applies. Lenders handle it differently, so ask yours how to raise the EMI and whether it can be lowered
+        again later.
+      </p>
+
       <h2>How this calculator works</h2>
       <p>First it works out the EMI that repays your outstanding balance over the remaining tenure:</p>
       <p className="formula">
@@ -120,6 +193,10 @@ export default function LoanPrepaymentCalculatorPage() {
         left. It then simulates the loan month by month, twice — once without prepayment and once with it:
       </p>
       <ul>
+        <li>
+          If you set a yearly EMI increase, the EMI is multiplied by (1 + increase) in months 13, 25, 37 and so on. The
+          &ldquo;without prepayment&rdquo; run always keeps today&apos;s EMI.
+        </li>
         <li>Interest for the month = balance × r.</li>
         <li>Principal repaid = EMI − interest. The final EMI is trimmed so the balance ends at exactly zero.</li>
         <li>Any extra monthly payment is then taken off the balance.</li>
@@ -128,7 +205,8 @@ export default function LoanPrepaymentCalculatorPage() {
           taken off the balance. A prepayment larger than the balance simply closes the loan.
         </li>
         <li>
-          <strong>Reduce tenure:</strong> the EMI never changes. <strong>Reduce EMI:</strong> after each lump sum, the
+          <strong>Reduce tenure:</strong> the EMI changes only through a yearly increase you set.{" "}
+          <strong>Reduce EMI:</strong> after each lump sum, the
           EMI is recalculated on the new balance over the months left in the original tenure. Extra monthly payments
           never change the EMI; they always shorten the loan.
         </li>
@@ -285,14 +363,33 @@ export default function LoanPrepaymentCalculatorPage() {
 
       <h2>Prepayment charges and RBI rules</h2>
       <p>
-        The Reserve Bank of India has directed that lenders should not levy foreclosure charges or prepayment penalties
-        on floating-rate term loans to individual borrowers taken for purposes other than business. In practice this
-        means most individuals with a floating-rate home loan can prepay without a penalty.
+        The RBI&apos;s <strong>Pre-payment Charges on Loans Directions, 2025</strong> (2 July 2025) apply to floating-rate
+        loans sanctioned or renewed on or after <strong>1 January 2026</strong>. Under them:
+      </p>
+      <ul>
+        <li>
+          <strong>Home loans and other non-business loans to individuals:</strong> no lender may charge for a part or
+          full prepayment.
+        </li>
+        <li>
+          <strong>Business loans to individuals and micro and small enterprises:</strong> commercial banks (other than
+          small finance, regional rural and local area banks), Tier 4 urban co-operative banks, upper-layer NBFCs and
+          all-India financial institutions may not charge at all. Small finance banks, regional rural banks, Tier 3
+          urban co-operative banks, state and central co-operative banks and middle-layer NBFCs may not charge on loans
+          of up to ₹50 lakh.
+        </li>
+        <li>
+          This applies whatever the source of the money and without any minimum lock-in period. Any charge that does
+          apply must be stated in the sanction letter and loan agreement.
+        </li>
+      </ul>
+      <p>
+        Floating-rate home loans to individuals taken before 2026 were already protected by earlier RBI instructions.
+        In practice, most individuals with a floating-rate home loan can prepay without a penalty.
       </p>
       <p>
-        Fixed-rate loans, loans taken for business purposes and some other products may still carry a prepayment or
-        foreclosure charge, often a percentage of the amount prepaid. Lenders may also set a minimum prepayment amount or
-        limit how often you can prepay. Read your loan agreement or ask your lender before you pay, and enter any fee in
+        <strong>Fixed-rate loans</strong> are outside these rules, so the lender&apos;s own policy applies, and a charge
+        of a percentage of the amount prepaid is common. Check your loan agreement before you pay, and enter any fee in
         the calculator to see your net saving.
       </p>
 

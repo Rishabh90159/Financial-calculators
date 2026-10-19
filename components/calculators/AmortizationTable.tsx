@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { StackedBarChart } from "@/components/charts/StackedBarChart";
 import { buildAmortizationSchedule, summariseByYear, type EmiInput } from "@/lib/calculations/emi";
+import { amortizationCsv, downloadTextFile } from "@/lib/export";
 import { formatINR } from "@/lib/format";
 
 interface AmortizationTableProps {
@@ -40,23 +41,37 @@ export function AmortizationTable({ input, onViewChange }: AmortizationTableProp
         />
       </div>
 
-      <div role="group" aria-label="Schedule view" className="mt-5 inline-flex rounded-md border border-line-strong p-0.5">
-        {(["yearly", "monthly"] as const).map((v) => (
-          <button
-            key={v}
-            type="button"
-            aria-pressed={view === v}
-            onClick={() => {
-              setView(v);
-              onViewChange?.();
-            }}
-            className={`rounded-md px-4 py-1.5 text-sm font-semibold capitalize ${
-              view === v ? "bg-brand text-white" : "text-ink-muted hover:text-ink"
-            }`}
-          >
-            {v}
-          </button>
-        ))}
+      <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+        <div role="group" aria-label="Schedule view" className="inline-flex rounded-md border border-line-strong p-0.5">
+          {(["yearly", "monthly"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              aria-pressed={view === v}
+              onClick={() => {
+                setView(v);
+                onViewChange?.();
+              }}
+              className={`rounded-md px-4 py-1.5 text-sm font-semibold capitalize ${
+                view === v ? "bg-brand text-white" : "text-ink-muted hover:text-ink"
+              }`}
+            >
+              {v}
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={() =>
+            downloadTextFile(
+              `emi-schedule-${Math.round(input.principal)}-${input.annualRate}pct-${input.tenureMonths}m.csv`,
+              amortizationCsv(input),
+            )
+          }
+          className="rounded-md border border-line-strong px-3 py-1.5 text-sm font-semibold text-brand hover:bg-paper"
+        >
+          Download schedule (CSV)
+        </button>
       </div>
 
       <div

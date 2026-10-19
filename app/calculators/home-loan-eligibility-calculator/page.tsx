@@ -1,7 +1,17 @@
 import Link from "next/link";
 import { HomeLoanEligibilityCalculator } from "@/components/calculators/HomeLoanEligibilityCalculator";
 import { CalculatorPageLayout, type Source } from "@/components/layout/CalculatorPageLayout";
+import { calculateHomeLoanEligibility } from "@/lib/calculations/homeLoanEligibility";
+import { formatINR } from "@/lib/format";
 import { buildMetadata, type FaqItem } from "@/lib/seo";
+
+/** Salary table rows, computed with the calculator's engine: 8.5%, 20 years, age 30, default FOIR and LTV, no other EMIs. */
+const SALARY_ROWS = [15_000, 20_000, 25_000, 30_000, 35_000, 40_000, 45_000, 50_000, 60_000, 70_000, 75_000, 1_00_000, 1_50_000, 2_00_000].map(
+  (salary) => ({
+    salary,
+    result: calculateHomeLoanEligibility({ monthlyIncome: salary, age: 30, tenureYears: 20, annualRate: 8.5 }),
+  }),
+);
 
 const DESCRIPTION =
   "Estimate how much home loan you can get on your salary. See your max EMI, eligible loan and property budget from income, existing EMIs, age, tenure and rate.";
@@ -223,60 +233,14 @@ export default function HomeLoanEligibilityCalculatorPage() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>₹20,000</td>
-            <td className="num">₹10,000</td>
-            <td className="num">₹11,52,308</td>
-            <td className="num">₹14,40,385</td>
-          </tr>
-          <tr>
-            <td>₹25,000</td>
-            <td className="num">₹12,500</td>
-            <td className="num">₹14,40,385</td>
-            <td className="num">₹18,00,482</td>
-          </tr>
-          <tr>
-            <td>₹30,000</td>
-            <td className="num">₹15,000</td>
-            <td className="num">₹17,28,463</td>
-            <td className="num">₹21,60,578</td>
-          </tr>
-          <tr>
-            <td>₹40,000</td>
-            <td className="num">₹20,000</td>
-            <td className="num">₹23,04,617</td>
-            <td className="num">₹28,80,771</td>
-          </tr>
-          <tr>
-            <td>₹50,000</td>
-            <td className="num">₹25,000</td>
-            <td className="num">₹28,80,771</td>
-            <td className="num">₹36,00,964</td>
-          </tr>
-          <tr>
-            <td>₹75,000</td>
-            <td className="num">₹37,500</td>
-            <td className="num">₹43,21,156</td>
-            <td className="num">₹54,01,446</td>
-          </tr>
-          <tr>
-            <td>₹1,00,000</td>
-            <td className="num">₹50,000</td>
-            <td className="num">₹57,61,542</td>
-            <td className="num">₹72,01,927</td>
-          </tr>
-          <tr>
-            <td>₹1,50,000</td>
-            <td className="num">₹75,000</td>
-            <td className="num">₹86,42,313</td>
-            <td className="num">₹1,15,23,084</td>
-          </tr>
-          <tr>
-            <td>₹2,00,000</td>
-            <td className="num">₹1,00,000</td>
-            <td className="num">₹1,15,23,084</td>
-            <td className="num">₹1,53,64,112</td>
-          </tr>
+          {SALARY_ROWS.map(({ salary, result }) => (
+            <tr key={salary}>
+              <td>{formatINR(salary)}</td>
+              <td className="num">{formatINR(result.maxEmi)}</td>
+              <td className="num">{formatINR(result.eligibleLoan)}</td>
+              <td className="num">{formatINR(result.propertyBudget)}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
       <p>

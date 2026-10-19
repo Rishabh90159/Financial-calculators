@@ -73,7 +73,9 @@ export default function MethodologyPage() {
         payments reduce principal after that month&apos;s EMI. With &ldquo;reduce tenure&rdquo; the EMI stays fixed;
         with &ldquo;reduce EMI&rdquo; it is recalculated after each lump sum over the months left in the original
         tenure, while extra monthly payments always shorten the loan. Any prepayment fee you enter is a percentage of
-        each amount prepaid and is subtracted to give the net saving. The prepay-versus-invest illustration grows the
+        each amount prepaid and is subtracted to give the net saving. An optional yearly EMI increase multiplies the EMI
+        in force by (1 + increase) in months 13, 25, 37 and so on; it is treated as a higher EMI, not a prepayment, so
+        no fee applies, and the comparison without prepayment keeps today&apos;s EMI. The prepay-versus-invest illustration grows the
         same lump sum over the same period at the loan rate (guaranteed) and at your assumed return (uncertain,
         optionally after tax on gains).
       </p>

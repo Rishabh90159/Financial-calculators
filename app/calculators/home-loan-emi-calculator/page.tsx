@@ -1,7 +1,28 @@
 import Link from "next/link";
 import { HomeLoanEmiCalculator } from "@/components/calculators/HomeLoanEmiCalculator";
 import { CalculatorPageLayout } from "@/components/layout/CalculatorPageLayout";
+import { calculateEmiAmount } from "@/lib/calculations/emi";
+import { formatINR } from "@/lib/format";
 import { buildMetadata, type FaqItem } from "@/lib/seo";
+
+/** EMI grid at 8.5%, computed with the calculator's engine at build time. */
+const GRID_RATE = 8.5;
+const GRID_TENURES = [10, 15, 20, 25, 30];
+const GRID_AMOUNTS = [
+  { label: "₹10 lakh", value: 10_00_000 },
+  { label: "₹20 lakh", value: 20_00_000 },
+  { label: "₹25 lakh", value: 25_00_000 },
+  { label: "₹30 lakh", value: 30_00_000 },
+  { label: "₹40 lakh", value: 40_00_000 },
+  { label: "₹50 lakh", value: 50_00_000 },
+  { label: "₹60 lakh", value: 60_00_000 },
+  { label: "₹75 lakh", value: 75_00_000 },
+  { label: "₹80 lakh", value: 80_00_000 },
+  { label: "₹1 crore", value: 1_00_00_000 },
+  { label: "₹1.5 crore", value: 1_50_00_000 },
+  { label: "₹2 crore", value: 2_00_00_000 },
+];
+const EMI_PER_LAKH_20Y = calculateEmiAmount(1_00_000, GRID_RATE, 240);
 
 const DESCRIPTION =
   "Calculate your monthly home loan EMI, total interest and total repayment, with a full repayment schedule. See EMIs for ₹20 lakh to ₹1 crore loans at 8.5%.";
@@ -157,6 +178,38 @@ export default function HomeLoanEmiCalculatorPage() {
             <td className="num">₹86,782</td>
             <td className="num">₹1,08,27,758</td>
           </tr>
+        </tbody>
+      </table>
+
+      <h2>Home loan EMI by loan amount and tenure</h2>
+      <p>
+        Monthly EMI at {GRID_RATE}% for common loan sizes and tenures. At this rate, each ₹1 lakh borrowed for 20 years
+        costs about {formatINR(EMI_PER_LAKH_20Y)} a month, so you can scale any figure in the table. For your own rate,
+        use the calculator above.
+      </p>
+      <table>
+        <caption className="sr-only">Home loan EMI at {GRID_RATE}% by loan amount and tenure</caption>
+        <thead>
+          <tr>
+            <th scope="col">Loan amount</th>
+            {GRID_TENURES.map((y) => (
+              <th key={y} scope="col" className="num">
+                {y} years
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {GRID_AMOUNTS.map((a) => (
+            <tr key={a.value}>
+              <th scope="row">{a.label}</th>
+              {GRID_TENURES.map((y) => (
+                <td key={y} className="num">
+                  {formatINR(calculateEmiAmount(a.value, GRID_RATE, y * 12))}
+                </td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
 

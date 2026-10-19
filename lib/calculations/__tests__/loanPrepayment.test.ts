@@ -385,3 +385,86 @@ describe("comparePrepayWithInvesting", () => {
     expect(comparePrepayWithInvesting({ amount: 0, loanAnnualRate: 8, expectedAnnualReturn: 10, months: 12 }).isValid).toBe(false);
   });
 });
+
+describe("yearly EMI step-up", () => {
+  /** Independent reference: plain month loop, EMI × (1 + s) at months 13, 25, …, no lump sums. */
+  function referenceStepUp(principal: number, annualRate: number, months: number, stepUpPercent: number) {
+    const r = annualRate / 1200;
+    let emi = calculateEmiAmount(principal, annualRate, months);
+    let balance = principal;
+    let interestTotal = 0;
+    let m = 0;
+    while (balance > 0.005 && m < months) {
+      m += 1;
+      if (m > 1 && (m - 1) % 12 === 0) emi *= 1 + stepUpPercent / 100;
+      const interest = balance * r;
+      interestTotal += interest;
+      balance -= Math.min(balance, emi - interest);
+    }
+    return { interestTotal, months: m };
+  }
+
+  const STEP_ONLY: LoanPrepaymentInput = { ...BASE, prepaymentAmount: 0, emiStepUpPercent: 5 };
+
+  it("leaves every result unchanged when the step-up is 0", () => {
+    const without = calculateLoanPrepayment(BASE);
+    const zero = calculateLoanPrepayment({ ...BASE, emiStepUpPercent: 0 });
+    expect(strategyNumbers(zero.reduceTenure)).toEqual(strategyNumbers(without.reduceTenure));
+    expect(strategyNumbers(zero.reduceEmi)).toEqual(strategyNumbers(without.reduceEmi));
+  });
+
+  it("matches an independent month-by-month simulation", () => {
+    const r = calculateLoanPrepayment(STEP_ONLY);
+    const ref = referenceStepUp(30_00_000, 8.5, 180, 5);
+    expect(r.reduceTenure.totalInterest).toBeCloseTo(ref.interestTotal, 4);
+    expect(r.reduceTenure.months).toBe(ref.months);
+  });
+
+  it("shortens the loan and saves interest without any prepayment or fee", () => {
+    const r = calculateLoanPrepayment({ ...STEP_ONLY, feePercent: 2 });
+    expect(r.hasPrepayment).toBe(true);
+    expect(r.original.months).toBe(180);
+    expect(r.reduceTenure.months).toBeLessThan(180);
+    expect(r.reduceTenure.interestSaved).toBeGreaterThan(0);
+    expect(r.reduceTenure.totalPrepaid).toBe(0);
+    expect(r.reduceTenure.feesPaid).toBe(0);
+    expect(r.reduceTenure.netSaving).toBeCloseTo(r.reduceTenure.interestSaved, 6);
+  });
+
+  it("raises the EMI by the step-up once per completed loan year", () => {
+    const r = calculateLoanPrepayment(STEP_ONLY);
+    const yearsStepped = Math.floor((r.reduceTenure.months - 1) / 12);
+    expect(r.reduceTenure.finalEmi).toBeCloseTo(r.currentEmi * 1.05 ** yearsStepped, 6);
+  });
+
+  it("has no effect when 12 months or fewer remain", () => {
+    const r = calculateLoanPrepayment({ ...STEP_ONLY, remainingYears: 1 });
+    expect(r.hasPrepayment).toBe(false);
+    expect(r.reduceTenure.interestSaved).toBe(0);
+    expect(r.reduceTenure.months).toBe(12);
+  });
+
+  it("adds to the saving from a lump-sum prepayment", () => {
+    const lumpOnly = calculateLoanPrepayment(BASE);
+    const both = calculateLoanPrepayment({ ...BASE, emiStepUpPercent: 5 });
+    expect(both.reduceTenure.interestSaved).toBeGreaterThan(lumpOnly.reduceTenure.interestSaved);
+    expect(both.reduceTenure.months).toBeLessThan(lumpOnly.reduceTenure.months);
+  });
+
+  it("steps up the recalculated EMI under reduce-EMI", () => {
+    const r = calculateLoanPrepayment({ ...BASE, emiStepUpPercent: 5 });
+    const lumpOnly = calculateLoanPrepayment(BASE);
+    expect(r.reduceEmi.emiAfterFirstPrepayment).toBeCloseTo(lumpOnly.reduceEmi.emiAfterFirstPrepayment, 6);
+    expect(r.reduceEmi.finalEmi).toBeGreaterThan(r.reduceEmi.emiAfterFirstPrepayment);
+    expect(r.reduceEmi.months).toBeLessThan(180);
+  });
+
+  it("sanitises invalid step-up values", () => {
+    expect(calculateLoanPrepayment({ ...STEP_ONLY, emiStepUpPercent: Number.NaN }).emiStepUpPercent).toBe(0);
+    expect(calculateLoanPrepayment({ ...STEP_ONLY, emiStepUpPercent: -5 }).emiStepUpPercent).toBe(0);
+    expect(calculateLoanPrepayment({ ...STEP_ONLY, emiStepUpPercent: 1000 }).emiStepUpPercent).toBe(50);
+    const extreme = calculateLoanPrepayment({ ...STEP_ONLY, emiStepUpPercent: 1000 });
+    expect(Number.isFinite(extreme.reduceTenure.totalInterest)).toBe(true);
+    expect(extreme.reduceTenure.months).toBeGreaterThan(12);
+  });
+});
