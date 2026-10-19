@@ -7,7 +7,7 @@ const DESCRIPTION =
   "See how much interest a lump-sum or yearly prepayment saves on your home loan, compare reducing tenure vs EMI, and weigh prepaying against investing.";
 
 export const metadata = buildMetadata({
-  title: "Home Loan Prepayment Calculator – Interest & Tenure Savings",
+  title: "Home Loan Prepayment Calculator – Reduce EMI or Tenure",
   description: DESCRIPTION,
   path: "/calculators/loan-prepayment-calculator",
 });

@@ -7,7 +7,7 @@ const DESCRIPTION =
   "Free SIP calculator for mutual fund SIP returns. Add a yearly step-up and inflation to see amount invested, estimated returns and value in today's money.";
 
 export const metadata = buildMetadata({
-  title: "SIP Calculator – SIP Return Calculator with Step-Up & Inflation",
+  title: "SIP Calculator – Returns with Step-Up & Inflation",
   description: DESCRIPTION,
   path: "/calculators/sip-calculator",
 });

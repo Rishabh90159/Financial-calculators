@@ -7,7 +7,7 @@ const DESCRIPTION =
   "Work out the total cost of buying a home in India: stamp duty, registration, GST, brokerage, loan fees and the real cash you need beyond the down payment.";
 
 export const metadata = buildMetadata({
-  title: "Property Purchase Cost Calculator – Total Cost of Buying a Home",
+  title: "Property Purchase Cost Calculator – Stamp Duty, Fees",
   description: DESCRIPTION,
   path: "/calculators/property-purchase-cost-calculator",
 });

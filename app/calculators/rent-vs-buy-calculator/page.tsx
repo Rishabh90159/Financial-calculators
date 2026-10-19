@@ -7,7 +7,7 @@ const DESCRIPTION =
   "Should you rent or buy a home? Compare your estimated net worth after buying with a home loan versus renting and investing the difference, year by year.";
 
 export const metadata = buildMetadata({
-  title: "Rent vs Buy Calculator – Compare the Cost of Renting vs Buying",
+  title: "Rent vs Buy Calculator – Should You Rent or Buy?",
   description: DESCRIPTION,
   path: "/calculators/rent-vs-buy-calculator",
 });

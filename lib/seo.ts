@@ -17,11 +17,23 @@ const WEBSITE_ID = `${siteConfig.url}/#website`;
 const OG_IMAGE = { url: "/opengraph-image", width: 1200, height: 630, alt: `${siteConfig.name} — ${siteConfig.tagline}` };
 
 /**
+ * Longest rendered <title> allowed, brand suffix included. Site audits (e.g. Bing
+ * Webmaster Tools) warn above 70 characters, and Google truncates long titles.
+ */
+export const MAX_TITLE_LENGTH = 70;
+
+/**
  * Complete per-page metadata. Next.js shallow-merges openGraph/twitter objects,
  * so every page sets them in full rather than relying on the root layout.
+ * Throws on an over-long title so the build fails instead of shipping it.
  */
 export function buildMetadata({ title, description, path, absoluteTitle }: PageMetaInput): Metadata {
   const fullTitle = absoluteTitle ? title : `${title} | ${siteConfig.name}`;
+  if (fullTitle.length > MAX_TITLE_LENGTH) {
+    throw new Error(
+      `Title for ${path} is ${fullTitle.length} characters (max ${MAX_TITLE_LENGTH}): "${fullTitle}"`,
+    );
+  }
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,

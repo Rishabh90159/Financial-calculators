@@ -37,6 +37,30 @@ The site-level chart for the week shows about 167 impressions and 4 clicks. None
 
 No formulas, calculator behaviour or URLs changed.
 
+### 3a. Title-length fix (19 October 2026)
+
+A site scan of the live site flagged "Title too long" (over 70 characters) on 11 pages. A live re-crawl confirmed exactly those 11 URLs, at 72–77 characters. The scanner counts decoded characters, " | MoneyMetric" included, with `&` as one character; the 69-character Home Loan EMI title was not flagged.
+
+| Page | Before | After |
+|---|---|---|
+| SIP | 77 · SIP Calculator – SIP Return Calculator with Step-Up & Inflation | 63 · SIP Calculator – Returns with Step-Up & Inflation |
+| Property purchase cost | 77 · …– Total Cost of Buying a Home | 66 · …– Stamp Duty, Fees |
+| Salary | 77 · In-Hand Salary Calculator India – CTC to Take-Home (FY 2026-27) | 69 · In-Hand Salary Calculator – CTC to Take-Home FY 2026-27 |
+| Home loan eligibility | 76 · …– Check Loan Amount by Salary | 62 · Home Loan Eligibility Calculator Based on Salary |
+| Rent vs buy | 76 · …– Compare the Cost of Renting vs Buying | 62 · …– Should You Rent or Buy? |
+| Car loan | 75 · …– Calculate EMI, Interest & Total Payment | 62 · …– EMI, Interest & Total Cost |
+| Calculators hub | 74 · All Financial Calculators – Loans, Home Buying, SIP & Salary | 64 · All Calculators – Loans, Home Buying, SIP & Salary |
+| Home affordability | 74 · …– How Much House Can I Afford? | 64 · …– What Can I Afford? |
+| EMI | 73 · …– Loan EMI, Interest & Amortization Schedule | 60 · …– Loan EMI, Interest & Schedule |
+| Loan prepayment | 73 · …– Interest & Tenure Savings | 68 · …– Reduce EMI or Tenure |
+| Loan | 72 · …– Personal Loan EMI, Interest & Total Cost | 62 · …– Personal Loan EMI and Interest |
+
+Every title still starts with the page's primary query from Search Console (for example "home loan eligibility calculator", "personal loan", "home loan prepayment … reduce emi / reduce tenure"). The eligibility and prepayment titles now match those longer queries more closely.
+
+**Regression guard:** `buildMetadata` in `lib/seo.ts` now throws if a rendered title exceeds `MAX_TITLE_LENGTH` (70), so `npm run build` fails before an over-long title ships. Tests are in `lib/__tests__/seo.test.ts`.
+
+**Search Console, last 28 days to 17 October 2026:** 801 impressions and 5 clicks. The Home Loan EMI page had 473 impressions (average position 81.7), eligibility 214 (80.1), loan 58 (83.4), home loan 26 (43.4) and prepayment 20 (73.9). Daily impressions rose from 22 on 13 October to 239 on 17 October, and that day's average position was 70.1. These are the "before" figures for this title change. Compare per page from 28 days after each URL is recrawled.
+
 ## 4. Manual actions
 
 1. **Vercel → Domains:** point `moneymetric.in` directly to `https://www.moneymetric.in`, so that `http://moneymetric.in` redirects in one hop.

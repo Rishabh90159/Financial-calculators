@@ -9,7 +9,7 @@ const DESCRIPTION =
   "Free in-hand salary calculator for India: convert CTC to monthly take-home pay after PF, professional tax and income tax. New vs old regime, FY 2026-27.";
 
 export const metadata = buildMetadata({
-  title: "In-Hand Salary Calculator India – CTC to Take-Home (FY 2026-27)",
+  title: "In-Hand Salary Calculator – CTC to Take-Home FY 2026-27",
   description: DESCRIPTION,
   path: "/calculators/salary-calculator",
 });

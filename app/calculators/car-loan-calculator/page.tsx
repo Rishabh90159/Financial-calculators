@@ -7,7 +7,7 @@ const DESCRIPTION =
   "Calculate your car loan EMI, total interest and full cost of the car from the on-road price and down payment. Compare 3–7 year tenures and check affordability.";
 
 export const metadata = buildMetadata({
-  title: "Car Loan Calculator – Calculate EMI, Interest & Total Payment",
+  title: "Car Loan Calculator – EMI, Interest & Total Cost",
   description: DESCRIPTION,
   path: "/calculators/car-loan-calculator",
 });

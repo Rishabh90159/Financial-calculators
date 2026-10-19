@@ -7,7 +7,7 @@ import { buildMetadata } from "@/lib/seo";
 import { absoluteUrl } from "@/lib/site";
 
 export const metadata = buildMetadata({
-  title: "All Financial Calculators – Loans, Home Buying, SIP & Salary",
+  title: "All Calculators – Loans, Home Buying, SIP & Salary",
   description:
     "Free financial calculators for EMI, home loans, eligibility, affordability, prepayment, rent vs buy, car loans, SIP and salary. Pick the one that answers your question.",
   path: "/calculators",

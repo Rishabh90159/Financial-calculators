@@ -7,7 +7,7 @@ const DESCRIPTION =
   "Estimate how much home loan you can get on your salary. See your max EMI, eligible loan and property budget from income, existing EMIs, age, tenure and rate.";
 
 export const metadata = buildMetadata({
-  title: "Home Loan Eligibility Calculator – Check Loan Amount by Salary",
+  title: "Home Loan Eligibility Calculator Based on Salary",
   description: DESCRIPTION,
   path: "/calculators/home-loan-eligibility-calculator",
 });

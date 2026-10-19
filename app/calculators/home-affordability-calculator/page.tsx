@@ -7,7 +7,7 @@ const DESCRIPTION =
   "Home loan affordability calculator: see how much house you can afford from your take-home pay, expenses and savings, with EMI, down payment and upfront cash.";
 
 export const metadata = buildMetadata({
-  title: "Home Affordability Calculator – How Much House Can I Afford?",
+  title: "Home Affordability Calculator – What Can I Afford?",
   description: DESCRIPTION,
   path: "/calculators/home-affordability-calculator",
 });
