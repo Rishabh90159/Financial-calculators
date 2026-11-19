@@ -57,6 +57,20 @@
     border-radius: 4px;
   }
 
+  /* The header is green, so its focus ring is white; the white menu panel inside keeps the brand ring. */
+  .site-header :focus-visible {
+    outline-color: #fff;
+  }
+  .site-header .menu-panel :focus-visible {
+    outline-color: var(--color-brand);
+    outline-offset: -3px;
+  }
+
+  /* Keep in-page anchors (e.g. "Full results") clear of the sticky header. */
+  html {
+    scroll-padding-top: 4.5rem;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

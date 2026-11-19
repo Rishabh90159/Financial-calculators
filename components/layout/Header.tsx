@@ -4,6 +4,7 @@ import { siteConfig } from "@/lib/site";
 import { Container } from "./Container";
 import { Logo } from "./Logo";
 import { MobileMenu } from "./MobileMenu";
+import { NavLink } from "./NavLink";
 
 const SITE_LINKS = [
   { href: "/about", label: "About" },
@@ -19,42 +20,53 @@ const FEATURED: { id: CalculatorId; label: string }[] = [
   { id: "salary", label: "Salary" },
 ];
 
+const barLink =
+  "rounded px-2.5 py-2 text-white/85 hover:bg-white/10 hover:text-white";
+const barLinkActive = "bg-white/15 font-semibold text-white";
+const menuLink = "block px-4 py-2 hover:bg-paper";
+const menuLinkActive = "bg-brand-tint font-semibold text-brand";
+
 /**
- * Site header. The mobile menu is a native <details> disclosure, so navigation
- * works with zero client JavaScript; MobileMenu closes it after navigation once
- * hydrated. A few featured calculators are linked on wide
- * screens; the mobile menu lists every calculator, grouped by category.
+ * Site header: a sticky brand-coloured bar. The mobile menu is a native <details>
+ * disclosure, so navigation works with zero client JavaScript; MobileMenu closes it
+ * after navigation once hydrated. NavLink highlights the current page. A few featured
+ * calculators are linked on wide screens; the mobile menu lists every calculator,
+ * grouped by category.
  */
 export function Header() {
   const calculators = liveCalculators();
   const categories = [...new Set(calculators.map((c) => c.category))] as CalculatorCategory[];
   return (
-    <header className="border-b border-line bg-paper">
+    <header className="site-header sticky top-0 z-40 border-b border-brand-strong bg-brand text-white shadow-[0_2px_8px_rgb(18_32_47/0.15)]">
       <Container className="flex h-14 items-center justify-between gap-4">
         <Link href="/" aria-label={`${siteConfig.name} home`} className="rounded-md">
-          <Logo />
+          <Logo tone="light" />
         </Link>
 
         <nav aria-label="Main" className="hidden md:block">
-          <ul className="flex items-center text-sm font-medium">
+          <ul className="flex items-center gap-0.5 text-sm font-medium">
             {FEATURED.map(({ id, label }) => (
               <li key={id} className="hidden lg:block">
-                <Link href={calculatorPath(getCalculator(id))} className="rounded px-2.5 py-2 text-ink-muted hover:text-ink hover:underline hover:underline-offset-4">
+                <NavLink href={calculatorPath(getCalculator(id))} className={barLink} activeClassName={barLinkActive}>
                   {label}
-                </Link>
+                </NavLink>
               </li>
             ))}
-            <li>
-              <Link href="/calculators" className="rounded px-2.5 py-2 font-semibold text-ink hover:text-brand">
+            <li className="lg:ml-1.5">
+              <NavLink
+                href="/calculators"
+                className="rounded-md bg-white px-3 py-1.5 font-semibold text-brand hover:bg-brand-tint"
+                activeClassName="ring-2 ring-white/60 ring-offset-2 ring-offset-brand"
+              >
                 <span className="lg:hidden">Calculators</span>
                 <span className="hidden lg:inline">All calculators</span>
-              </Link>
+              </NavLink>
             </li>
             {SITE_LINKS.map((l, i) => (
-              <li key={l.href} className={i === 0 ? "ml-2 border-l border-line-strong pl-2" : undefined}>
-                <Link href={l.href} className="rounded px-2.5 py-2 text-ink-muted hover:text-ink hover:underline hover:underline-offset-4">
+              <li key={l.href} className={i === 0 ? "ml-2 border-l border-white/30 pl-2" : undefined}>
+                <NavLink href={l.href} className={barLink} activeClassName={barLinkActive}>
                   {l.label}
-                </Link>
+                </NavLink>
               </li>
             ))}
           </ul>
@@ -62,17 +74,17 @@ export function Header() {
 
         <MobileMenu
           summary={
-            <summary className="flex cursor-pointer list-none items-center gap-2 rounded-md border border-line-strong px-3 py-1.5 text-sm font-semibold [&::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer list-none items-center gap-2 rounded-md border border-white/50 px-3 py-1.5 text-sm font-semibold text-white hover:bg-white/10 [&::-webkit-details-marker]:hidden">
+              <svg viewBox="0 0 20 20" className="h-4 w-4" aria-hidden="true">
+                <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
               Menu
-              <span aria-hidden="true" className="text-ink-muted group-open:rotate-180">
-                ▾
-              </span>
             </summary>
           }
         >
           <nav
             aria-label="Main"
-            className="absolute right-0 z-20 mt-2 max-h-[calc(100dvh-5rem)] w-[min(18rem,calc(100vw-2rem))] overflow-y-auto rounded-md border border-line-strong bg-surface py-2 shadow-[0_4px_12px_rgb(18_32_47/0.08)]"
+            className="menu-panel absolute right-0 z-20 mt-3 max-h-[calc(100dvh-5rem)] w-[min(20rem,calc(100vw-2rem))] overflow-y-auto rounded-md border border-line-strong bg-surface py-2 text-ink shadow-[0_8px_24px_rgb(18_32_47/0.18)]"
           >
             {categories.map((cat) => (
               <div key={cat} className="pb-1">
@@ -84,23 +96,27 @@ export function Header() {
                     .filter((c) => c.category === cat)
                     .map((c) => (
                       <li key={c.id}>
-                        <Link href={calculatorPath(c)} className="block px-4 py-2 hover:bg-paper">
+                        <NavLink href={calculatorPath(c)} className={menuLink} activeClassName={menuLinkActive}>
                           {c.name}
-                        </Link>
+                        </NavLink>
                       </li>
                     ))}
                 </ul>
               </div>
             ))}
-            <Link href="/calculators" className="block border-t border-line px-4 py-2.5 font-semibold text-brand hover:bg-paper">
+            <NavLink
+              href="/calculators"
+              className="block border-t border-line px-4 py-2.5 font-semibold text-brand hover:bg-paper"
+              activeClassName="bg-brand-tint"
+            >
               All calculators
-            </Link>
+            </NavLink>
             <ul className="mt-1 border-t border-line pt-1 text-[0.95rem]">
               {SITE_LINKS.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} className="block px-4 py-2.5 hover:bg-paper">
+                  <NavLink href={l.href} className="block px-4 py-2.5 hover:bg-paper" activeClassName={menuLinkActive}>
                     {l.label}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>

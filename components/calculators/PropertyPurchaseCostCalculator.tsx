@@ -149,6 +149,7 @@ export function PropertyPurchaseCostCalculator() {
     <div className="space-y-6">
       <CalculatorCard
         formLabel="Property purchase cost calculator inputs"
+        summary={{ label: "Total upfront cash", value: formatINR(result.totalUpfrontCash) }}
         inputs={
           <>
             <NumberField

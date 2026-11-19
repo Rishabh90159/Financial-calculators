@@ -91,6 +91,7 @@ export function HomeLoanEligibilityCalculator() {
     <div className="space-y-6">
       <CalculatorCard
         formLabel="Home loan eligibility calculator inputs"
+        summary={{ label: "Estimated eligible loan", value: formatINR(result.eligibleLoan) }}
         resultsHeading="Your estimate"
         inputs={
           <>

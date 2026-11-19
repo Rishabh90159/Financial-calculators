@@ -61,6 +61,7 @@ export function HomeLoanCalculator() {
     <div className="space-y-6">
       <CalculatorCard
         formLabel="Home loan calculator inputs"
+        summary={{ label: "Monthly EMI", value: result.emi.isValid ? formatINR(result.emi.emi) : "₹0" }}
         inputs={
           <>
             <NumberField

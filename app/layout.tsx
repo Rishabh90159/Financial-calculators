@@ -35,7 +35,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f7f5ef",
+  // Matches the header so the mobile browser bar blends into it.
+  themeColor: "#0b5d4b",
   width: "device-width",
   initialScale: 1,
 };

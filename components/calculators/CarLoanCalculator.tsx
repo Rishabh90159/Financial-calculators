@@ -100,6 +100,7 @@ export function CarLoanCalculator() {
     <div className="space-y-6">
       <CalculatorCard
         formLabel="Car loan calculator inputs"
+        summary={{ label: "Monthly EMI", value: hasLoan ? formatINR(result.emi.emi) : "₹0" }}
         inputs={
           <>
             <NumberField

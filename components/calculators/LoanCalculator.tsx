@@ -4,7 +4,7 @@ import { useId, useMemo, useState } from "react";
 import { NumberField } from "@/components/ui/NumberField";
 import { ResultStat } from "@/components/ui/ResultStat";
 import { calculateLoan, tenureToMonths, type TenureUnit } from "@/lib/calculations/loan";
-import { formatPercent } from "@/lib/format";
+import { formatINR, formatPercent } from "@/lib/format";
 import { AmortizationTable } from "./AmortizationTable";
 import { CalculatorCard } from "./CalculatorCard";
 import { LoanInsights } from "./LoanInsights";
@@ -47,6 +47,7 @@ export function LoanCalculator() {
     <div className="space-y-6">
       <CalculatorCard
         formLabel="Loan calculator inputs"
+        summary={{ label: "Monthly EMI", value: result.isValid ? formatINR(result.emi) : "₹0" }}
         inputs={
           <>
             <NumberField

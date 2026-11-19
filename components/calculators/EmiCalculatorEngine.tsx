@@ -5,6 +5,7 @@ import { NumberField } from "@/components/ui/NumberField";
 import { PresetButtons } from "@/components/ui/PresetButtons";
 import { calculateEmi, type EmiInput } from "@/lib/calculations/emi";
 import { yearsToMonths } from "@/lib/calculations/utils";
+import { formatINR } from "@/lib/format";
 import { AmortizationTable } from "./AmortizationTable";
 import { CalculatorCard } from "./CalculatorCard";
 import { LoanInsights } from "./LoanInsights";
@@ -45,6 +46,7 @@ export function EmiCalculatorEngine({ config }: { config: EmiEngineConfig }) {
     <div className="space-y-6">
       <CalculatorCard
         formLabel={config.formLabel}
+        summary={{ label: "Monthly EMI", value: result.isValid ? formatINR(result.emi) : "₹0" }}
         inputs={
           <>
             {config.presets && (

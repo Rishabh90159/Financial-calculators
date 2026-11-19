@@ -166,6 +166,7 @@ export function LoanPrepaymentCalculator() {
     <div className="space-y-6">
       <CalculatorCard
         formLabel="Loan prepayment calculator inputs"
+        summary={{ label: "Interest saved", value: formatINR(selected.interestSaved) }}
         inputs={
           <>
             <NumberField

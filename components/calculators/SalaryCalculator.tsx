@@ -110,6 +110,7 @@ export function SalaryCalculator() {
     <div className="space-y-6">
       <CalculatorCard
         formLabel="Salary calculator inputs"
+        summary={{ label: "Monthly take-home salary", value: formatINR(result.monthlyTakeHome) }}
         resultsHeading="Estimated take-home"
         inputs={
           <>

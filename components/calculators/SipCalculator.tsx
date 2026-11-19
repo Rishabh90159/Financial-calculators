@@ -31,6 +31,7 @@ export function SipCalculator() {
     <div className="space-y-6">
       <CalculatorCard
         formLabel="SIP calculator inputs"
+        summary={{ label: "Estimated total value", value: formatINR(result.futureValue) }}
         resultsHeading="Estimated results"
         inputs={
           <>

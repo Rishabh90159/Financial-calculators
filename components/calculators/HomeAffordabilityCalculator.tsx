@@ -157,6 +157,7 @@ export function HomeAffordabilityCalculator() {
     <div className="space-y-8">
       <CalculatorCard
         formLabel="Home affordability calculator inputs"
+        summary={{ label: "Comfortable property price", value: formatINR(b.propertyPrice) }}
         inputs={
           <>
             <fieldset className="space-y-5">
